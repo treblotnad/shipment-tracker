@@ -1,0 +1,61 @@
+const typeDefs = `#graphql
+
+type User {
+    _id: ID
+    username: String
+    email: String
+    shipmentCount: Int
+    savedShipments: [Shipment]
+}
+
+type Shipment {
+    _id: ID
+    tracking: String
+    carrier: String
+    status: String
+    eta: String
+    trackingLink: String
+    locations: [String]
+}
+
+type Auth {
+    token: ID!
+    user: User
+}
+
+type Query {
+    users: [User]
+    user(username: String!): User
+    me: User
+    shipments(username: String): [Shipment]
+    shipment(shipmentId: ID!): Shipment
+}
+
+input ShipmentInput {
+    tracking: String
+    carrier: String
+}
+
+type Mutation {
+    addUser(
+        username: String!, 
+        email: String!, 
+        password: String!
+        ): Auth
+    login(
+        email: String!, 
+        password: String!
+        ): Auth
+    saveShipment(
+        userId: ID!, 
+        shipmentData: ShipmentInput!
+        ): User
+    removeShipment(
+        userId: ID!,
+        shipmentId: ID!
+        ): User
+}
+
+`;
+
+module.exports = typeDefs;
