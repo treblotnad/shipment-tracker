@@ -13,7 +13,7 @@ export const matchCarrier = (tracking) => {
   const fedexReg3 = /^[0-9]{15}$/;
 
   if (tracking.match(upsReg)) {
-    return "UPS";
+    return "ups";
   }
   if (
     tracking.match(uspsReg1) ||
@@ -21,7 +21,7 @@ export const matchCarrier = (tracking) => {
     tracking.match(uspsReg3) ||
     tracking.match(uspsReg4)
   ) {
-    return "USPS";
+    return "usps";
   }
   if (
     tracking.match(fedexReg1) ||
