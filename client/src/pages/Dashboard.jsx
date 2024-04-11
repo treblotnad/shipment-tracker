@@ -4,6 +4,7 @@ import { Container, Card, Button, Row, Col } from "react-bootstrap";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
 import { REMOVE_SHIPMENT } from "../utils/mutations";
+import { SAVE_SHIPMENT } from "../utils/mutations";
 import Auth from "../utils/auth";
 import { removeShipmentId } from "../utils/localStorage";
 
@@ -39,9 +40,47 @@ const Dashboard = () => {
   //     if (loading) {
   //         return <h2>LOADING...</h2>;
   //     }
+  const [saveShipment, { error }] = useMutation(SAVE_SHIPMENT);
 
+  const [searchInput, setSearchInput] = useState("");
+  async function handleSaveShipment(e) {
+    e.preventDefault();
+    const token = Auth.loggedIn() ? Auth.getToken() : null;
+
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const result = await saveShipment({
+        variables: {
+          userId: Auth.getUser().data._id,
+          shipmentData: {
+            tracking: searchInput,
+            carrier: "UPS",
+          },
+        },
+      });
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return (
-    <h1>test</h1>
+    <>
+      <form onSubmit={handleSaveShipment}>
+        <input
+          type="text"
+          name="searchInput"
+          onChange={(e) => setSearchInput(e.target.value)}
+        ></input>
+        <button
+          type="submit"
+          className="btn-block btn-danger"
+          onClick={handleSaveShipment}
+        ></button>
+      </form>
+    </>
     //         <>
     //             <div fluid className="text-light bg-dark p-5">
     //                 <Container>
