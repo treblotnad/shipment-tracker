@@ -1,14 +1,16 @@
-const { User, Shipment } = require('../models');
-const { signToken, AuthenticationError } = require('../utils/auth');
+const { User, Shipment } = require("../models");
+const { signToken, AuthenticationError } = require("../utils/auth");
 
 const resolvers = {
   Query: {
     // get a single user by their username
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate('savedShipments');
+        return User.findOne({ _id: context.user._id }).populate(
+          "savedShipments"
+        );
       }
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
   },
 
@@ -18,12 +20,12 @@ const resolvers = {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw new AuthenticationError;
+        throw new AuthenticationError();
       }
 
       const correctPw = await user.isCorrectPassword(password);
       if (!correctPw) {
-        throw new AuthenticationError;
+        throw new AuthenticationError();
       }
 
       const token = signToken(user);
@@ -39,7 +41,11 @@ const resolvers = {
 
     // save a shipment to a user's `savedShipments` field by adding it to the set (to prevent duplicates)
     saveShipment: async (_, { userId, shipmentData }, context) => {
-      const user = await User.findByIdAndUpdate(userId, { $push: { savedShipments: shipmentData } }, { new: true });
+      const user = await User.findByIdAndUpdate(
+        userId,
+        { $push: { savedShipments: shipmentData } },
+        { new: true }
+      );
       return user;
     },
 
@@ -52,7 +58,7 @@ const resolvers = {
           { new: true }
         );
       }
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
   },
 };

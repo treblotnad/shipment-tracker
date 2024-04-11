@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const LOGIN_USER = gql`
   mutation login($email: String!, $password: String!) {
@@ -11,8 +11,6 @@ export const LOGIN_USER = gql`
     }
   }
 `;
-
-
 
 export const ADD_USER = gql`
   mutation addUser($username: String!, $email: String!, $password: String!) {
@@ -27,37 +25,30 @@ export const ADD_USER = gql`
 `;
 
 export const SAVE_SHIPMENT = gql`
-    mutation saveShipment($userId: ID!, $shipmentData: ShipmentInput!){
-        saveShipment(userId: $userId, shipmentData: $shipmentData) {
-        _id
-        email
-        savedShipments {
-            shipmentId
-            tracking
-            carrier
-            status
-            eta
-            trackingLink
-            locations
-        }
+  mutation saveShipment($userId: ID, $shipmentData: ShipmentInput) {
+    saveShipment(userId: $userId, shipmentData: $shipmentData) {
+      _id
+      email
+      savedShipments {
+        tracking
+        carrier
+        isDelivered
+      }
     }
   }
 `;
 
 export const REMOVE_SHIPMENT = gql`
-    mutation removeShipment($userId: ID!, $shipmentId: ID!) {
-        removeShipment(userId: $userId, shipmentId: $shipmentId) {
-            _id
-            email
-            savedShipments {
-                shipmentId
-                tracking
-                carrier
-                status
-                eta
-                trackingLink
-                locations
-            }
-        }
+  mutation removeShipment($userId: ID!, $shipmentId: ID!) {
+    removeShipment(userId: $userId, shipmentId: $shipmentId) {
+      _id
+      email
+      savedShipments {
+        shipmentId
+        tracking
+        carrier
+        isDelivered
+      }
     }
+  }
 `;
