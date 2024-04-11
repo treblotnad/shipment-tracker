@@ -7,6 +7,7 @@ import { REMOVE_SHIPMENT } from "../utils/mutations";
 import { SAVE_SHIPMENT } from "../utils/mutations";
 import Auth from "../utils/auth";
 import { removeShipmentId } from "../utils/localStorage";
+import { matchCarrier } from "../utils/carrierValidate";
 
 const Dashboard = () => {
   //     const { loading, data } = useQuery(GET_ME);
@@ -50,14 +51,16 @@ const Dashboard = () => {
     if (!token) {
       return false;
     }
-
+    const cleanSearchInput = searchInput.replace(/\s/g, "");
+    const carrier = matchCarrier(cleanSearchInput);
+    console.log(carrier);
     try {
       const result = await saveShipment({
         variables: {
           userId: Auth.getUser().data._id,
           shipmentData: {
-            tracking: searchInput,
-            carrier: "UPS",
+            tracking: cleanSearchInput,
+            carrier: carrier,
           },
         },
       });
