@@ -14,6 +14,10 @@ const shipmentSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  hiveId: {
+    type: String,
+    require: true,
+  },
 });
 
 module.exports = shipmentSchema;

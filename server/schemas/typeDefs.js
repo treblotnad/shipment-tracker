@@ -13,6 +13,7 @@ type Shipment {
     tracking: String
     carrier: String
     isDelivered: Boolean
+    hiveId: String
 }
 
 type Auth {
@@ -31,6 +32,7 @@ type Query {
 input ShipmentInput {
     tracking: String!
     carrier: String!
+    hiveid: String
 }
 
 type Mutation {

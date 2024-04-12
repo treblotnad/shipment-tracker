@@ -53,7 +53,6 @@ const Dashboard = () => {
     }
     const cleanSearchInput = searchInput.replace(/\s/g, "");
     const carrier = matchCarrier(cleanSearchInput);
-    console.log(carrier);
     try {
       const result = await saveShipment({
         variables: {

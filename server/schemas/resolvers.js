@@ -1,5 +1,6 @@
 const { User, Shipment } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
+const getId = require("../utils/axiosAPI");
 
 const resolvers = {
   Query: {
@@ -41,12 +42,22 @@ const resolvers = {
 
     // save a shipment to a user's `savedShipments` field by adding it to the set (to prevent duplicates)
     saveShipment: async (_, { userId, shipmentData }, context) => {
-      const user = await User.findByIdAndUpdate(
-        userId,
-        { $push: { savedShipments: shipmentData } },
-        { new: true }
-      );
-      return user;
+      try {
+        const hiveId = await getId(shipmentData.tracking, shipmentData.carrier);
+        // console.log("IN TRY BLOCK");
+        console.log(hiveId);
+        shipmentData.hiveId = hiveId;
+        const user = await User.findByIdAndUpdate(
+          userId,
+          { $push: { savedShipments: shipmentData } },
+          { new: true }
+        );
+        console.log(hiveId);
+        return user;
+      } catch (e) {
+        console.error(e.reponse);
+        // console.log(e.data.data);
+      }
     },
 
     // remove a shipment from `savedShipments`
