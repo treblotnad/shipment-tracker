@@ -42,17 +42,21 @@ const resolvers = {
 
     // save a shipment to a user's `savedShipments` field by adding it to the set (to prevent duplicates)
     saveShipment: async (_, { userId, shipmentData }, context) => {
-      const hiveId = await getId(shipmentData.tracking, shipmentData.carrier);
-      // console.log(hiveId.data.data._id);
-      shipmentData.hiveId = hiveId.data.data._id;
-      console.log(shipmentData);
-      const user = await User.findByIdAndUpdate(
-        userId,
-        { $push: { savedShipments: shipmentData } },
-        { new: true }
-      );
-
-      return user;
+      try {
+        const hiveId = await getId(shipmentData.tracking, shipmentData.carrier);
+        shipmentData.hiveId = hiveId.data.data._id;
+        const user = await User.findByIdAndUpdate(
+          userId,
+          { $push: { savedShipments: shipmentData } },
+          { new: true }
+        );
+        console.log(hiveId.toObject());
+        return user;
+      } catch (e) {
+        // console.log(hiveId);
+        console.log("testtesttest");
+        console.error(e);
+      }
     },
 
     // remove a shipment from `savedShipments`

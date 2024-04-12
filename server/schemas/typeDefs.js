@@ -32,7 +32,7 @@ type Query {
 input ShipmentInput {
     tracking: String!
     carrier: String!
-    hiveid: String!
+    hiveid: String
 }
 
 type Mutation {
