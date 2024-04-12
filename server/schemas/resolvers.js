@@ -44,18 +44,19 @@ const resolvers = {
     saveShipment: async (_, { userId, shipmentData }, context) => {
       try {
         const hiveId = await getId(shipmentData.tracking, shipmentData.carrier);
-        shipmentData.hiveId = hiveId.data.data._id;
+        // console.log("IN TRY BLOCK");
+        console.log(hiveId);
+        shipmentData.hiveId = hiveId;
         const user = await User.findByIdAndUpdate(
           userId,
           { $push: { savedShipments: shipmentData } },
           { new: true }
         );
-        console.log(hiveId.toObject());
+        console.log(hiveId);
         return user;
       } catch (e) {
-        // console.log(hiveId);
-        console.log("testtesttest");
-        console.error(e);
+        console.error(e.reponse);
+        // console.log(e.data.data);
       }
     },
 
