@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Container, Col, Form, Button, Card, Row } from "react-bootstrap";
+//import the client utils API.js functions
+import { createTracking, getTrackingDetails } from "../utils/API";
 
 import Auth from "../utils/auth";
 // import { searchGoogleBooks } from '../utils/API';
@@ -83,9 +85,52 @@ const Home = () => {
   //         }
   //     };
 
+  const [trackingNumber, setTrackingNumber] = useState('');
+  const [carrierSlug, setCarrierSlug] = useState('');
+  const [trackingDetails, setTrackingDetails] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSearch = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const creationResult = await createTracking(trackingNumber, carrierSlug);
+      const details = await getTrackingDetails(creationResult.data._id);
+      setTrackingDetails(details);
+    } catch (err) {
+      setError(err.message);
+      setTrackingDetails(null);
+    }
+    setLoading(false);
+  };
+
   return (
     <>
-      <h1>hi</h1>
+      <main>
+        <h1>Track a Package</h1>
+        <section id="search-container">
+          <form id="search-form">
+            <label>Tracking Number</label>
+            <input type="text" id="input-tracking-number" name="tracking" value={trackingNumber} onChange={e => setTrackingNumber(e.target.value)} placeholder="Type in Tracking Number"/>
+            <label>Carrier:</label>
+            <input type="text" value={carrierSlug} onChange={e => setCarrierSlug(e.target.value)} placeholder="Carrier" />
+            <button type="submit" onClick={handleSearch} disabled={loading} id="search-button">Search</button>
+          </form>
+        </section>
+        {loading && <p>Loading...</p>}
+        {error && <p>Error: {error.message}</p>}
+        <section id="results-container">
+          {trackingDetails && (
+            <div className="results">
+              <h3>Tracking Details</h3>
+              <div className="card">
+                <h4>Status: {trackingDetails.data.current.status}</h4>
+              </div>
+            </div>
+          )}
+        </section>
+      </main>
     </>
     //         <>
     //             <div className="text-light bg-dark p-5">
