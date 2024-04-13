@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { matchCarrier } from '../utils/carrierValidate';
 import {
     FormControl,
-    FormLabel,
     FormErrorMessage,
     FormHelperText,
     Input,
@@ -12,29 +11,46 @@ import {
 } from '@chakra-ui/react'
 
 export default function SearchTracking({ onSaveShipment }) {
-    const [input, setInput] = useState('')
-    const isError = input === input.length < 10
+    const [input, setInput] = useState('');
+    const [isError, setIsError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const handleSaveShipment = (event) => {
-        event.preventDefault();
+    const handleInputChange = (e) => {
+        setInput(e.target.value);
+        // reset error message when input changes
+        setIsError(false);
+        setErrorMessage('');
+    };
+
+    const handleSaveShipment = (e) => {
+        e.preventDefault();
         console.log(input);
-        if (input.length >= 6) {
-            const carrier = matchCarrier(input); // matchCarrier function from client/src/utils/carrierValidate.js
-            onSaveShipment(input, carrier); // pass the tracking number and carrier to the onSaveShipment function
-            setInput(''); // clear the input field
+        if (input.length < 10) {
+            setIsError(true);
+            setErrorMessage('Tracking number must be at least 10 characters long');
+            return;
         }
+
+        const carrier = matchCarrier(input); // matchCarrier function from /utils/carrierValidate.js
+        if (!carrier) {
+            setIsError(true);
+            setErrorMessage('Please enter a UPS, USPS, or FedEx tracking number.');
+            return;
+        }
+
+        onSaveShipment(input, carrier); // pass the tracking number and carrier to the onSaveShipment function
+        setInput(''); // clear the input field
     };
 
     return (
         <FormControl maxW='800px' isInvalid={isError} onSubmit={handleSaveShipment} >
-            <FormLabel>Search Tracking</FormLabel>
             <InputGroup>
                 <Input
                     h='2.5rem'
                     type='text'
                     value={input}
                     placeholder='Enter a tracking number'
-                    onChange={(e) => setInput(e.target.value)}
+                    onChange={handleInputChange}
                 />
                 <InputRightElement width='5rem'>
                     < Button
@@ -46,7 +62,7 @@ export default function SearchTracking({ onSaveShipment }) {
                 </InputRightElement>
             </InputGroup>
             {isError ? (
-                <FormErrorMessage>Tracking number must be at least 10 characters long</FormErrorMessage>
+                <FormErrorMessage>{errorMessage}</FormErrorMessage>
             ) : (
                 <FormHelperText>Enter a tracking number.</FormHelperText>
             )}
