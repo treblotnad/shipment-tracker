@@ -1,6 +1,6 @@
 const { User, Shipment } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
-const getId = require("../utils/axiosAPI");
+const { getId } = require("../utils/axiosAPI");
 
 const resolvers = {
   Query: {
