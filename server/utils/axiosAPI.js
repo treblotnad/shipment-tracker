@@ -25,6 +25,28 @@ const getId = async (tracking, carrier) => {
   }
 };
 
+const getTracking = async (hiveId) => {
+  try {
+    const { data } = await axios.get(
+      "https://api.trackinghive.com/trackings/" + hiveId,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: process.env.AUTHORIZATION,
+        },
+        validateStatus(status) {
+          return status < 400;
+        },
+      }
+    );
+    return data.data;
+  } catch (error) {
+    console.log(error.toJSON());
+  }
+};
+
+// getTracking("6619376c75e292007bd951d0").then((data) => console.log(data));
+
 // getId("9434609105114603215305", "usps").then((id) => console.log({ id }));
 
-module.exports = getId;
+module.exports = { getId, getTracking };
