@@ -7,7 +7,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-
+import { ChakraProvider } from "@chakra-ui/react";
 import Navbar from "./components/Navbar";
 
 // create the Apollo Provider to make every request work with the Apollo Server
@@ -39,8 +39,10 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <>
-        <Navbar />
-        <Outlet />
+        <ChakraProvider>
+          <Navbar />
+          <Outlet />
+        </ChakraProvider>
       </>
     </ApolloProvider>
   );
