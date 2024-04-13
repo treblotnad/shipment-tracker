@@ -21,6 +21,7 @@ const Dashboard = () => {
       console.error('Not logged in');
       return false;
     }
+    
     try {
       const result = await saveShipment({
         variables: {
