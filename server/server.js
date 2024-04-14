@@ -14,6 +14,10 @@ const server = new ApolloServer({
   resolvers,
 });
 
+// app.use(express.urlencoded({ extended: false }));
+// app.use(express.json());
+
+
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async () => {
   await server.start();
@@ -33,6 +37,10 @@ const startApolloServer = async () => {
     });
   }
 
+  // Trackhive API route
+  const trackingRoute = require('./utils/axiosAPIroute');
+  app.use('/api', trackingRoute);
+
   db.once('open', () => {
     app.listen(PORT, () => {
       console.log(`API server running on port ${PORT}!`);
@@ -40,6 +48,8 @@ const startApolloServer = async () => {
     });
   });
 };
+
+
 
 // Call the async function to start the server
   startApolloServer();
