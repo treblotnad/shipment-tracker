@@ -1,15 +1,28 @@
 const { User, Shipment } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
-const getId = require("../utils/axiosAPI");
+const { getId, getTracking } = require("../utils/axiosAPI");
 
 const resolvers = {
   Query: {
     // get a single user by their username
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate(
-          "savedShipments"
-        );
+        try {
+          const response = await User.findOne({
+            _id: context.user._id,
+          }).populate("savedShipments");
+
+          response.hiveData = await Promise.all(
+            response.savedShipments.map(async (shipment) => {
+              return await getTracking(shipment.hiveId);
+            })
+          );
+
+          console.log(response.hiveData);
+          return response;
+        } catch (error) {
+          console.log(error.toJSON());
+        }
       }
       throw new AuthenticationError("You need to be logged in!");
     },
