@@ -18,9 +18,10 @@ const Dashboard = () => {
 
   const handleSaveShipment = async (tracking, carrier) => {
     if (!Auth.loggedIn()) {
-      console.error('Not logged in');
+      console.error("Not logged in");
       return false;
     }
+
     try {
       const result = await saveShipment({
         variables: {
@@ -38,29 +39,36 @@ const Dashboard = () => {
   };
 
   if (loading) {
-    return <Text>Loading...</Text>
-  };
+    return <Text>Loading...</Text>;
+  }
 
   if (error) {
     return <Text>Load Error: {error.message}</Text>;
-  };
+  }
 
   console.log(data);
 
   const savedShipments = data?.me?.savedShipments || [];
 
+  
+
   return (
     <Box padding="4">
-      <Text fontSize="2xl" mb="4">Your Shipments</Text>
+      <Text fontSize="2xl" mb="4">
+        Your Shipments
+      </Text>
       <SearchTracking onSaveShipment={handleSaveShipment} />
       <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing={5}>
         {savedShipments.map((shipment) => (
-          <ShipmentCard key={shipment._id} tracking={shipment.tracking} carrier={shipment.carrier} />
+          <ShipmentCard
+            key={shipment._id}
+            tracking={shipment.tracking}
+            carrier={shipment.carrier}
+          />
         ))}
       </SimpleGrid>
     </Box>
   );
 };
-
 
 export default Dashboard;

@@ -11,6 +11,13 @@ export const GET_ME = gql`
         tracking
         carrier
         isDelivered
+        hiveId
+      }
+      hiveData {
+        trackings {
+          expected_delivery
+          shipment_delivery_date
+        }
       }
     }
   }
