@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
-// import { REMOVE_SHIPMENT } from "../utils/mutations";
+import { REMOVE_SHIPMENT } from "../utils/mutations";
 import { SAVE_SHIPMENT } from "../utils/mutations";
 import Auth from "../utils/auth";
-// import { removeShipmentId } from "../utils/localStorage";
+import { removeShipmentId } from "../utils/localStorage";
 // import { matchCarrier } from "../utils/carrierValidate";
 import SearchTracking from "../components/SearchTracking";
 import ShipmentCard from "../components/shipmentCard";
@@ -47,10 +47,7 @@ const Dashboard = () => {
   }
 
   console.log(data);
-
   const savedShipments = data?.me?.savedShipments || [];
-
-  
 
   return (
     <Box padding="4">
@@ -61,6 +58,8 @@ const Dashboard = () => {
       <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing={5}>
         {savedShipments.map((shipment) => (
           <ShipmentCard
+            shipmentId={shipment._id}
+            userId={data.me._id}
             key={shipment._id}
             tracking={shipment.tracking}
             carrier={shipment.carrier}

@@ -42,12 +42,8 @@ export const REMOVE_SHIPMENT = gql`
   mutation removeShipment($userId: ID!, $shipmentId: ID!) {
     removeShipment(userId: $userId, shipmentId: $shipmentId) {
       _id
-      email
       savedShipments {
-        shipmentId
-        tracking
-        carrier
-        isDelivered
+        _id
       }
     }
   }
