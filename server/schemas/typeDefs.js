@@ -60,6 +60,7 @@ type Query {
     me: User
     shipments(username: String): [Shipment]
     shipment(shipmentId: ID!): Shipment
+    getTrackingInfo(tracking: String!, carrier: String!): Shipment
 }
 
 input ShipmentInput {
