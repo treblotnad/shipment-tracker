@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { Container, Col, Form, Button, Card, Row } from "react-bootstrap";
-//import the client utils API.js functions
-import { createTracking, getTrackingDetails } from "../utils/API";
 
 import Auth from "../utils/auth";
 // import { searchGoogleBooks } from '../utils/API';
@@ -85,53 +83,56 @@ const Home = () => {
   //         }
   //     };
 
-  const [trackingNumber, setTrackingNumber] = useState('');
-  const [carrierSlug, setCarrierSlug] = useState('');
-  const [trackingDetails, setTrackingDetails] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [formData, setFormData] = useState({ tracking: '', carrier: '' });
+  const [saveShipment, { data, loading, error }] = useMutation(SAVE_SHIPMENT);
 
-  const handleSearch = async () => {
-    setLoading(true);
-    setError(null);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
     try {
-      const creationResult = await createTracking(trackingNumber, carrierSlug);
-      const details = await getTrackingDetails(creationResult.data._id);
-      setTrackingDetails(details);
-    } catch (err) {
-      setError(err.message);
-      setTrackingDetails(null);
+      await saveShipment({
+        variables: {
+          shipmentData: { ...formData }
+        }
+      });
+    } catch (error) {
+      console.error('Error Submitting shipment:', error);
     }
-    setLoading(false);
   };
 
   return (
-    <>
-      <main>
-        <h1>Track a Package</h1>
-        <section id="search-container">
-          <form id="search-form">
-            <label>Tracking Number</label>
-            <input type="text" id="input-tracking-number" name="tracking" value={trackingNumber} onChange={e => setTrackingNumber(e.target.value)} placeholder="Type in Tracking Number"/>
-            <label>Carrier:</label>
-            <input type="text" value={carrierSlug} onChange={e => setCarrierSlug(e.target.value)} placeholder="Carrier" />
-            <button type="submit" onClick={handleSearch} disabled={loading} id="search-button">Search</button>
-          </form>
-        </section>
-        {loading && <p>Loading...</p>}
-        {error && <p>Error: {error.message}</p>}
-        <section id="results-container">
-          {trackingDetails && (
-            <div className="results">
-              <h3>Tracking Details</h3>
-              <div className="card">
-                <h4>Status: {trackingDetails.data.current.status}</h4>
-              </div>
+    <main>
+      <h1>Track a Package</h1>
+      <section id="search-container">
+        <form onSubmit={handleFormSubmit} id="search-form">
+          <label>Tracking Number</label>
+          <input type="text" id="input-tracking-number" name="tracking" value={formData.tracking} onChange={handleInputChange} placeholder="Type in Tracking Number"/>
+          <label>Carrier:</label>
+          <input type="text" name="carrier" value={formData.carrier} onChange={handleInputChange} placeholder="Carrier" />
+          <button type="submit" id="search-button" disabled={loading}>Search</button>
+        </form>
+      </section>
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error.message}</p>}
+      <section id="results-container">
+        {data && (
+          <div className="results">
+            <h3>Tracking Details</h3>
+            <div className="card">
+              <p>Data: {data.saveShipment}</p>
             </div>
-          )}
-        </section>
-      </main>
-    </>
+          </div>
+        )}
+      </section>
+    </main>
+
     //         <>
     //             <div className="text-light bg-dark p-5">
     //                 <Container>
