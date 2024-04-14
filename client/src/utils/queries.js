@@ -14,9 +14,36 @@ export const GET_ME = gql`
         hiveId
       }
       hiveData {
+        created
+        tracking_number
+        slug
+        current_status
         trackings {
           expected_delivery
           shipment_delivery_date
+          shipment_weight
+          shipment_weight_unit
+          checkpoints {
+            message
+            subtag_message
+            checkpoint_time
+            city
+            state
+            zip
+            location
+          }
+          address {
+            ship_from {
+              city
+              state
+              country_iso
+            }
+            ship_to {
+              city
+              state
+              country_iso
+            }
+          }
         }
       }
     }

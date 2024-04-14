@@ -2,25 +2,27 @@ const { User, Shipment } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
 const { getId, getTracking } = require("../utils/axiosAPI");
 
-const axios = require('axios');
-require('dotenv').config();
+const axios = require("axios");
+require("dotenv").config();
 
 // Helper function to fetch traking details using the ID from getID:
 const getTrackingDetails = async (trackingId) => {
   try {
-    const response = await axios.get(`https://api.trackinghive.com/trackings/${trackingId}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: process.env.AUTHORIZATION,
+    const response = await axios.get(
+      `https://api.trackinghive.com/trackings/${trackingId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: process.env.AUTHORIZATION,
+        },
       }
-    });
+    );
     return response.data.data;
   } catch (error) {
-    console.error('Failed to fetch tracking details', error);
-    throw new Error('Failed to fetch tracking details');
+    console.error("Failed to fetch tracking details", error);
+    throw new Error("Failed to fetch tracking details");
   }
 };
-
 
 const resolvers = {
   Query: {
@@ -38,10 +40,10 @@ const resolvers = {
             })
           );
 
-          console.log(response.hiveData);
+          // console.log(response.hiveData);
           return response;
         } catch (error) {
-          console.log(error.toJSON());
+          console.log(error);
         }
       }
       throw new AuthenticationError("You need to be logged in!");
@@ -49,7 +51,7 @@ const resolvers = {
     getTrackingInfo: async (_, { tracking, carrier }) => {
       const trackingId = await getId(tracking, carrier);
       if (!trackingId) {
-        throw new Error('Failed to create tracking entry');
+        throw new Error("Failed to create tracking entry");
       }
       const shipmentDetails = await getTrackingDetails(trackingId);
       return {
@@ -57,7 +59,7 @@ const resolvers = {
         tracking,
         carrier,
         isDelivered: shipmentDetails.isDelivered,
-      }
+      };
     },
   },
 
