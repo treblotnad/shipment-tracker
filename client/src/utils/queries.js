@@ -15,3 +15,14 @@ export const GET_ME = gql`
     }
   }
 `;
+
+export const GET_TRACKING_INFO = gql`
+  query getTrackingInfo($tracking: String!, $carrier: String!) {
+    getTrackingInfo(tracking: $tracking, carrier: $carrier) {
+      _id
+      tracking
+      carrier
+      isDelivered
+    }
+  }
+`;

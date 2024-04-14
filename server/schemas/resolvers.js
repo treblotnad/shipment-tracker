@@ -2,6 +2,26 @@ const { User, Shipment } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
 const getId = require("../utils/axiosAPI");
 
+const axios = require('axios');
+require('dotenv').config();
+
+// Helper function to fetch traking details using the ID from getID:
+const getTrackingDetails = async (trackingId) => {
+  try {
+    const response = await axios.get(`https://api.trackinghive.com/trackings/${trackingId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: process.env.AUTHORIZATION,
+      }
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error('Failed to fetch tracking details', error);
+    throw new Error('Failed to fetch tracking details');
+  }
+};
+
+
 const resolvers = {
   Query: {
     // get a single user by their username
@@ -12,6 +32,19 @@ const resolvers = {
         );
       }
       throw new AuthenticationError("You need to be logged in!");
+    },
+    getTrackingInfo: async (_, { tracking, carrier }) => {
+      const trackingId = await getId(tracking, carrier);
+      if (!trackingId) {
+        throw new Error('Failed to create tracking entry');
+      }
+      const shipmentDetails = await getTrackingDetails(trackingId);
+      return {
+        _id: trackingId,
+        tracking,
+        carrier,
+        isDelivered: shipmentDetails.isDelivered,
+      }
     },
   },
 

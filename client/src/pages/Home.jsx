@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLazyQuery } from "@apollo/client";
 import { Container, Col, Form, Button, Card, Row } from "react-bootstrap";
 
 import Auth from "../utils/auth";
@@ -7,6 +8,9 @@ import { saveShipmentIds, getSavedShipmentIds } from "../utils/localStorage";
 
 import { useMutation } from "@apollo/client";
 import { SAVE_SHIPMENT } from "../utils/mutations";
+
+//import the query to get the tracking information for a search
+import { GET_TRACKING_INFO } from "../utils/queries";
 
 const Home = () => {
   //     // create state for holding returned google api data
@@ -83,27 +87,26 @@ const Home = () => {
   //         }
   //     };
 
-  const [formData, setFormData] = useState({ tracking: '', carrier: '' });
-  const [saveShipment, { data, loading, error }] = useMutation(SAVE_SHIPMENT);
+  const [trackingNumber, setTrackingNumber] = useState('');
+  const [carrier, setCarrier] = useState('');
+  const [fetchTrackingInfo, { data, loading, error }] = useLazyQuery(GET_TRACKING_INFO);
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value
+  const handleSearch = () => {
+    if (!trackingNumber || !carrier) {
+      alert('Please enter both tracking number and carrier.');
+      return;
+    }
+    fetchTrackingInfo({
+      variables: { tracking: trackingNumber, carrier: carrier }
     });
   };
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      await saveShipment({
-        variables: {
-          shipmentData: { ...formData }
-        }
-      });
-    } catch (error) {
-      console.error('Error Submitting shipment:', error);
+  const handleInputChange = (event) => {
+    const {name, value} = event.target;
+    if (name === 'tracking') {
+      setTrackingNumber(value);
+    } else if (name === 'carrier') {
+      setCarrier(value);
     }
   };
 
@@ -111,26 +114,28 @@ const Home = () => {
     <main>
       <h1>Track a Package</h1>
       <section id="search-container">
-        <form onSubmit={handleFormSubmit} id="search-form">
+        <form id="search-form" onSubmit={(e) => e.preventDefault()}>
           <label>Tracking Number</label>
-          <input type="text" id="input-tracking-number" name="tracking" value={formData.tracking} onChange={handleInputChange} placeholder="Type in Tracking Number"/>
+          <input type="text" id="input-tracking-number" name="tracking" placeholder="Type in Tracking Number" value={trackingNumber} onChange={handleInputChange} />
           <label>Carrier:</label>
-          <input type="text" name="carrier" value={formData.carrier} onChange={handleInputChange} placeholder="Carrier" />
-          <button type="submit" id="search-button" disabled={loading}>Search</button>
+          <input type="text" name="carrier" placeholder="Carrier" value={carrier} onChange={handleInputChange} />
+          <button type="button" id="search-button" onClick={handleSearch}>Search</button>
         </form>
       </section>
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error.message}</p>}
-      <section id="results-container">
-        {data && (
+      
+      {data && (
+        <section id="results-container">
           <div className="results">
-            <h3>Tracking Details</h3>
+            <h3>Tracking Details:</h3>
             <div className="card">
-              <p>Data: {data.saveShipment}</p>
+              <p>Status: {data.getTrackingInfo.isDelivered ? 'Deliverd' : 'In Transit'}</p>
             </div>
           </div>
-        )}
-      </section>
+        </section>
+      )}
+      
     </main>
 
     //         <>
