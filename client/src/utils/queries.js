@@ -7,7 +7,7 @@ export const GET_ME = gql`
       username
       email
       savedShipments {
-        shipmentId
+        _id
         tracking
         carrier
         isDelivered
