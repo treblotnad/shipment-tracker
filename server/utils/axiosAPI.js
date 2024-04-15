@@ -22,6 +22,7 @@ const getId = async (tracking, carrier) => {
     return data.data._id;
   } catch (error) {
     console.log(error.toJSON());
+    throw new error("Failed to create tracking entry");
   }
 };
 
