@@ -8,28 +8,9 @@ import { removeShipmentId } from "../utils/localStorage";
 // import { matchCarrier } from "../utils/carrierValidate";
 import SearchTracking from "../components/SearchTracking";
 import ShipmentCard from "../components/shipmentCard";
+import PaginationObj from "../components/pagination";
 
-import {
-  Box,
-  Text,
-  SimpleGrid,
-  Grid,
-  Center,
-  Select,
-  Button,
-  Stack,
-  ChakraProvider,
-} from "@chakra-ui/react";
-import {
-  Pagination,
-  usePagination,
-  PaginationPage,
-  PaginationNext,
-  PaginationPrevious,
-  PaginationPageGroup,
-  PaginationContainer,
-  PaginationSeparator,
-} from "@ajna/pagination";
+import { Box, Text, SimpleGrid } from "@chakra-ui/react";
 
 const Dashboard = () => {
   const { loading, data, error } = useQuery(GET_ME);
@@ -76,7 +57,9 @@ const Dashboard = () => {
         Your Shipments
       </Text>
       <SearchTracking onSaveShipment={handleSaveShipment} />
-      <SimpleGrid columns={{ sm: 1, md: 1, lg: 1 }} spacing={5}>
+      <PaginationObj props={savedShipments}></PaginationObj>
+
+      {/* <SimpleGrid columns={{ sm: 1, md: 1, lg: 1 }} spacing={5}>
         {savedShipments.map((shipment) => (
           <ShipmentCard
             shipmentId={shipment.mongoId}
@@ -86,7 +69,7 @@ const Dashboard = () => {
             carrier={shipment.slug}
           />
         ))}
-      </SimpleGrid>
+      </SimpleGrid> */}
     </Box>
   );
 };
