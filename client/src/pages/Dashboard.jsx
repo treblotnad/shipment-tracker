@@ -9,7 +9,27 @@ import { removeShipmentId } from "../utils/localStorage";
 import SearchTracking from "../components/SearchTracking";
 import ShipmentCard from "../components/shipmentCard";
 
-import { Box, Text, SimpleGrid } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  SimpleGrid,
+  Grid,
+  Center,
+  Select,
+  Button,
+  Stack,
+  ChakraProvider,
+} from "@chakra-ui/react";
+import {
+  Pagination,
+  usePagination,
+  PaginationPage,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationPageGroup,
+  PaginationContainer,
+  PaginationSeparator,
+} from "@ajna/pagination";
 
 const Dashboard = () => {
   const { loading, data, error } = useQuery(GET_ME);
@@ -46,12 +66,8 @@ const Dashboard = () => {
     return <Text>Load Error: {error.message}</Text>;
   }
 
-  const hiveData = data?.me?.hiveData;
-  const savedShipments = data?.me?.savedShipments || [];
+  const savedShipments = data?.me?.hiveData || [];
 
-  // for (let i = 0; i < hiveData.length; i++) {
-  //   hiveData[i].mongoId = savedShipments[i]._id;
-  // }
   console.log(data.me);
 
   return (
@@ -60,14 +76,14 @@ const Dashboard = () => {
         Your Shipments
       </Text>
       <SearchTracking onSaveShipment={handleSaveShipment} />
-      <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing={5}>
+      <SimpleGrid columns={{ sm: 1, md: 1, lg: 1 }} spacing={5}>
         {savedShipments.map((shipment) => (
           <ShipmentCard
-            shipmentId={shipment._id}
+            shipmentId={shipment.mongoId}
             userId={data.me._id}
-            key={shipment._id}
-            tracking={shipment.tracking}
-            carrier={shipment.carrier}
+            key={shipment.mongoId}
+            tracking={shipment.tracking_number}
+            carrier={shipment.slug}
           />
         ))}
       </SimpleGrid>

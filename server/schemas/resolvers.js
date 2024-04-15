@@ -38,7 +38,7 @@ const resolvers = {
             response.savedShipments.map(async (shipment) => {
               let hiveData = await getTracking(shipment.hiveId);
               hiveData.mongoId = shipment._id;
-              console.log(hiveData.mongoId);
+              // console.log(hiveData.mongoId);
               return hiveData;
             })
           );
@@ -96,7 +96,7 @@ const resolvers = {
       try {
         const hiveId = await getId(shipmentData.tracking, shipmentData.carrier);
         // console.log("IN TRY BLOCK");
-        console.log(hiveId);
+        // console.log(hiveId);
         shipmentData.hiveId = hiveId;
         const user = await User.findByIdAndUpdate(
           userId,
