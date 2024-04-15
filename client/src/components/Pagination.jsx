@@ -8,6 +8,7 @@ import {
   Button,
   Stack,
   ChakraProvider,
+  Accordion,
 } from "@chakra-ui/react";
 import {
   Pagination,
@@ -23,8 +24,8 @@ import { useState, useEffect } from "react";
 
 import ShipmentCard from "./shipmentCard";
 
-function pageSlice(array, pageSize, pageNum) {
-  return array.slice((pageNum - 1) * pageSize, pageNum * pageSize);
+function pageSlice(array, pageSize, offset) {
+  return array.slice(offset, offset + pageSize);
 }
 
 function PaginationObj({ props }) {
@@ -65,10 +66,25 @@ function PaginationObj({ props }) {
     const pageSize = Number(event.target.value);
     setPageSize(pageSize);
   };
-  console.log(props);
+
   return (
     <ChakraProvider>
       <Stack>
+        <SimpleGrid columns={{ sm: 1, md: 1, lg: 1 }} spacing={5}>
+          <Accordion allowMultiple>
+            {packages.map((shipment) => (
+              <ShipmentCard
+                shipmentId={shipment.mongoId}
+                key={shipment.mongoId}
+                tracking_number={shipment.tracking_number}
+                slug={shipment.slug}
+              >
+                test
+              </ShipmentCard>
+            ))}
+          </Accordion>
+        </SimpleGrid>
+
         <Pagination
           pagesCount={pagesCount}
           currentPage={currentPage}
