@@ -26,7 +26,7 @@ type Hive {
     current_status: String
     created: String
     modified: String
-    
+    mongoId: String
 }
 
 type Tracking {

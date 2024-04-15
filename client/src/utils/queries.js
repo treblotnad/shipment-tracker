@@ -18,6 +18,37 @@ export const GET_ME = gql`
         tracking_number
         slug
         current_status
+        _id
+        mongoId
+        trackings {
+          shipment_weight
+          shipment_weight_unit
+          expected_delivery
+          shipment_type
+          shipment_pickup_date
+          shipment_delivery_date
+          address {
+            ship_from {
+              city
+              state
+              country_iso
+            }
+            ship_to {
+              city
+              state
+              country_iso
+            }
+          }
+          checkpoints {
+            message
+            subtag_message
+            checkpoint_time
+            city
+            state
+            zip
+            location
+          }
+        }
       }
     }
   }
