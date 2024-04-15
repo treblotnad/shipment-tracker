@@ -1,7 +1,15 @@
 import { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+// import { Form } from 'react-bootstrap';
 import axios from 'axios';
 import { matchCarrier } from '../utils/carrierValidate';
+const BASE_URL = 'http://localhost:3001';
+import {
+    FormControl,
+    Input,
+    InputGroup,
+    InputRightElement,
+    Button,
+} from "@chakra-ui/react";
 
 export default function SearchTrackingHome({ onResults, onError, onInputClear }) {
     const [trackingNumber, setTrackingNumber] = useState('');
@@ -17,7 +25,7 @@ export default function SearchTrackingHome({ onResults, onError, onInputClear })
         try {
             onError(null); // clears any previous error message
             onInputClear(); // clears any previous results when trying a new search
-            const response = await axios.post('http://localhost:3001/api/trackshipment', {
+            const response = await axios.post(BASE_URL + '/api/trackshipment', {
                 tracking: trackingNumber,
                 carrier
             });
@@ -43,20 +51,22 @@ export default function SearchTrackingHome({ onResults, onError, onInputClear })
     };
 
     return (
-        <Form onSubmit={handleSearch}>
-            <Form.Group>
-                <Form.Label>Tracking Number</Form.Label>
-                <Form.Control
+        <FormControl onSubmit={handleSearch}>
+            <InputGroup>
+                <Input
+                    h="2.5rem"
                     type="text"
-                    placeholder="Type in Tracking Number"
-                    value={trackingNumber}
+                    // value={input}
+                    placeholder="Enter a tracking number"
                     onChange={handleInputChange}
                 />
-            </Form.Group>
-            <Button onClick={handleSearch}>
-                Search
-            </Button>
-        </Form>
+                <InputRightElement width="5rem">
+                    <Button h="2rem" size="md" type="submit" mr='2' colorScheme='blue' onClick={handleSearch}>
+                        Search
+                    </Button>
+                </InputRightElement>
+            </InputGroup>
+        </FormControl>
     );
 };
 

@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { Navbar, Nav, Container, Modal, Tab } from 'react-bootstrap';
 import SignUpForm from './SignupForm';
 import LoginForm from './LoginForm';
-
 import Auth from '../utils/auth';
+import NavLogo from './Logo';
+import { Box, Text, Button } from '@chakra-ui/react';
+
 
 const AppNavbar = () => {
     // set modal display state
@@ -12,30 +14,28 @@ const AppNavbar = () => {
 
     return (
         <>
-            <Navbar bg='dark' variant='dark' expand='lg'>
+            <Navbar expand='lg'>
                 <Container fluid>
-                    <Navbar.Brand as={Link} to='/'>
-                        Shipment Search
-                    </Navbar.Brand>
-                    <Navbar.Toggle aria-controls='navbar' />
-                    <Navbar.Collapse id='navbar' className='d-flex flex-row-reverse'>
-                        <Nav className='ml-auto d-flex'>
-                            <Nav.Link as={Link} to='/'>
-                                Home
-                            </Nav.Link>
-                            {/* if user is logged in show saved books and logout */}
+                    <NavLogo as={Link} to='/'
+                        w='200px'>
+                    </NavLogo>
+
+                    <Navbar id='navbar' className='d-flex flex-row-reverse'>
+                        <Nav className='d-flex'>
+
                             {Auth.loggedIn() ? (
                                 <>
                                     <Nav.Link as={Link} to='/dashboard'>
                                         Dashboard
                                     </Nav.Link>
-                                    <Nav.Link onClick={Auth.logout}>Logout</Nav.Link>
+                                    <Button onClick={Auth.logout}>Logout</Button>
                                 </>
                             ) : (
-                                <Nav.Link onClick={() => setShowModal(true)}>Login/Sign Up</Nav.Link>
+                                <Button onClick={() => setShowModal(true)}>Login</Button>
+                                // <Nav.Link onClick={() => setShowModal(true)}>Login/Sign Up</Nav.Link>
                             )}
                         </Nav>
-                    </Navbar.Collapse>
+                    </Navbar>
                 </Container>
             </Navbar>
             {/* set modal data up */}
