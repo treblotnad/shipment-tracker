@@ -46,8 +46,13 @@ const Dashboard = () => {
     return <Text>Load Error: {error.message}</Text>;
   }
 
-  console.log(data);
+  const hiveData = data?.me?.hiveData;
   const savedShipments = data?.me?.savedShipments || [];
+
+  // for (let i = 0; i < hiveData.length; i++) {
+  //   hiveData[i].mongoId = savedShipments[i]._id;
+  // }
+  console.log(data.me);
 
   return (
     <Box padding="4">

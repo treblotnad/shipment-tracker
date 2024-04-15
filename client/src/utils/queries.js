@@ -6,19 +6,12 @@ export const GET_ME = gql`
       _id
       username
       email
-      savedShipments {
-        _id
-        tracking
-        carrier
-        isDelivered
-        hiveId
-      }
       hiveData {
         created
         tracking_number
         slug
         current_status
-        _id
+        
         mongoId
         trackings {
           shipment_weight
@@ -49,6 +42,13 @@ export const GET_ME = gql`
             location
           }
         }
+      }
+      savedShipments {
+        _id
+        tracking
+        carrier
+        isDelivered
+        hiveId
       }
     }
   }

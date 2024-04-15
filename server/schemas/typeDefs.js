@@ -7,6 +7,7 @@ type User {
     shipmentCount: Int
     savedShipments: [Shipment]
     hiveData: [Hive]
+    
 }
 
 type Hive {
@@ -15,7 +16,7 @@ type Hive {
     customer_phone_numbers: [String]
     tags: [String]
     return_to_sender: Boolean
-    _id: String
+    
     tracking_number: String
     slug: String
     source: String

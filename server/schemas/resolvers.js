@@ -36,15 +36,14 @@ const resolvers = {
 
           response.hiveData = await Promise.all(
             response.savedShipments.map(async (shipment) => {
-              return await getTracking(shipment.hiveId);
+              let hiveData = await getTracking(shipment.hiveId);
+              hiveData.mongoId = shipment._id;
+              console.log(hiveData.mongoId);
+              return hiveData;
             })
           );
 
-          for (let i = 0; i < response.hiveData.length; i++) {
-            response.hiveData[i].mongoId = response.savedShipments[i]._id;
-          }
-
-          console.log(response.hiveData);
+          // console.log(response.hiveData);
           return response;
         } catch (error) {
           console.log(error.toJSON());
