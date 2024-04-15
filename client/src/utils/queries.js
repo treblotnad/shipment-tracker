@@ -14,10 +14,10 @@ export const GET_ME = gql`
         hiveId
       }
       hiveData {
-        trackings {
-          expected_delivery
-          shipment_delivery_date
-        }
+        created
+        tracking_number
+        slug
+        current_status
       }
     }
   }
