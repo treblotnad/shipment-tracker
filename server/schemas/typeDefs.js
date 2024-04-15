@@ -7,6 +7,7 @@ type User {
     shipmentCount: Int
     savedShipments: [Shipment]
     hiveData: [Hive]
+    
 }
 
 type Hive {
@@ -15,7 +16,7 @@ type Hive {
     customer_phone_numbers: [String]
     tags: [String]
     return_to_sender: Boolean
-    _id: String
+    
     tracking_number: String
     slug: String
     source: String
@@ -26,9 +27,11 @@ type Hive {
     current_status: String
     created: String
     modified: String
+    mongoId: String
 }
 
 type Tracking {
+    address: Address
     signed_by: String
     tag: String
     shipment_weight: String
@@ -38,8 +41,30 @@ type Tracking {
     shipment_type: String
     shipment_pickup_date: String
     shipment_delivery_date: String
+    checkpoints: [Checkpoint]
 }
 
+type Checkpoint {
+    message: String
+    subtag_message: String
+    checkpoint_time: String
+    city: String
+    state: String
+    zip: String
+    location: String
+}
+
+type Address {
+    ship_from: Location
+    ship_to: Location
+}
+
+type Location {
+    city: String
+    state: String
+    country_iso: String
+    country_name: String
+}
 
 type Shipment {
     _id: ID

@@ -8,6 +8,7 @@ import { removeShipmentId } from "../utils/localStorage";
 // import { matchCarrier } from "../utils/carrierValidate";
 import SearchTracking from "../components/SearchTracking";
 import ShipmentCard from "../components/shipmentCard";
+import PaginationObj from "../components/pagination";
 
 import { Box, Text, SimpleGrid } from "@chakra-ui/react";
 
@@ -46,8 +47,9 @@ const Dashboard = () => {
     return <Text>Load Error: {error.message}</Text>;
   }
 
-  console.log(data);
-  const savedShipments = data?.me?.savedShipments || [];
+  const savedShipments = data?.me?.hiveData || [];
+
+  console.log(data.me);
 
   return (
     <Box padding="4">
@@ -55,17 +57,19 @@ const Dashboard = () => {
         Your Shipments
       </Text>
       <SearchTracking onSaveShipment={handleSaveShipment} />
-      <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing={5}>
+      <PaginationObj props={savedShipments}></PaginationObj>
+
+      {/* <SimpleGrid columns={{ sm: 1, md: 1, lg: 1 }} spacing={5}>
         {savedShipments.map((shipment) => (
           <ShipmentCard
-            shipmentId={shipment._id}
+            shipmentId={shipment.mongoId}
             userId={data.me._id}
-            key={shipment._id}
-            tracking={shipment.tracking}
-            carrier={shipment.carrier}
+            key={shipment.mongoId}
+            tracking={shipment.tracking_number}
+            carrier={shipment.slug}
           />
         ))}
-      </SimpleGrid>
+      </SimpleGrid> */}
     </Box>
   );
 };
