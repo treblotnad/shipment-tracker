@@ -1,4 +1,4 @@
-import dateToWeekDate from '../utils/datetime';
+import { dateToWeekDate, dateToShortDate } from '../utils/datetime';
 import Status from './Status';
 
 import {
@@ -26,7 +26,7 @@ export default function ShipmentCardHome({ shipmentDetails }) {
     return (
         <>
             {console.log(shipmentDetails)}
-            <Card boxShadow='dark-lg' p='6' rounded='md' bg='white' mt={12}>
+            <Card boxShadow='dark-lg' p='6' rounded='md' bg='white' mt={12} mb={20}>
                 <CardHeader>
                     <Grid templateColumns='100px 1.5fr 3fr 1fr 150px' gap={3} >
 
@@ -44,7 +44,7 @@ export default function ShipmentCardHome({ shipmentDetails }) {
                         <GridItem>
                             <Center h='40px'>
                                 <Text fontWeight='bold'>
-                                    {shipmentDetails.trackings.address.ship_from.city}, {shipmentDetails.trackings.address.ship_from.state} <ArrowRightIcon boxSize={8} /> {shipmentDetails.trackings.address.ship_to.city}, {shipmentDetails.trackings.address.ship_to.state}
+                                    {shipmentDetails.trackings.address.ship_from.city}, {shipmentDetails.trackings.address.ship_from.state}  <ArrowRightIcon boxSize={8} mx={12} />{shipmentDetails.trackings.address.ship_to.city}, {shipmentDetails.trackings.address.ship_to.state}
                                 </Text>
                             </Center>
                         </GridItem>
@@ -82,7 +82,7 @@ export default function ShipmentCardHome({ shipmentDetails }) {
                                         <GridItem key={index}>
                                             <Box pl={3} pb={5}>
                                                 <Text mb={0}>
-                                                    {dateToWeekDate(checkpoint.checkpoint_time)}: {checkpoint.city}, {checkpoint.state}
+                                                    {dateToShortDate(checkpoint.checkpoint_time)}: {checkpoint.city}, {checkpoint.state}
                                                 </Text>
                                                 <Text as='i' color='gray' >
                                                     {checkpoint.message}
@@ -93,7 +93,6 @@ export default function ShipmentCardHome({ shipmentDetails }) {
                                 })}
                             </Grid>
                         </GridItem>
-
                     </Grid>
                 </CardBody>
             </Card >
