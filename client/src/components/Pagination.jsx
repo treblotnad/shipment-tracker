@@ -28,7 +28,7 @@ function pageSlice(array, pageSize, offset) {
   return array.slice(offset, offset + pageSize);
 }
 
-function PaginationObj({ props }) {
+function PaginationObj({ props, dbProps }) {
   const [packagesTotal, setPackagesTotal] = useState(1);
   const [packages, setPackages] = useState([]);
   const [sort, setSort] = useState("ETA-Desc");
@@ -42,8 +42,6 @@ function PaginationObj({ props }) {
     offset,
     currentPage,
     setCurrentPage,
-    setIsDisabled,
-    isDisabled,
     pageSize,
     setPageSize,
   } = usePagination({
@@ -55,11 +53,21 @@ function PaginationObj({ props }) {
       currentPage: 1,
     },
   });
+
   useEffect(() => {
     const pagePackages = pageSlice(props, pageSize, offset);
     setPackages(pagePackages);
     setPackagesTotal(props.length);
-  }, [currentPage, pageSize, offset, sort, props]);
+  }, [
+    currentPage,
+    pageSize,
+    offset,
+    sort,
+    props,
+    dbProps,
+    PaginationPage,
+    pages,
+  ]);
 
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);

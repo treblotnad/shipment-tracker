@@ -17,8 +17,6 @@ const Dashboard = () => {
   const [saveShipment, { error: saveError }] = useMutation(SAVE_SHIPMENT);
   const [searchInput, setSearchInput] = useState("");
 
-  
-
   const handleSaveShipment = async (tracking, carrier) => {
     if (!Auth.loggedIn()) {
       console.error("Not logged in");
@@ -53,7 +51,7 @@ const Dashboard = () => {
   if (error) {
     return <Text>Load Error: {error.message}</Text>;
   }
-
+  const dbShipments = data?.me?.savedShipments;
   const savedShipments = data?.me?.hiveData || [];
 
   console.log(data.me);
@@ -64,7 +62,10 @@ const Dashboard = () => {
         Your Shipments
       </Text>
       <SearchTracking onSaveShipment={handleSaveShipment} />
-      <PaginationObj props={savedShipments}></PaginationObj>
+      <PaginationObj
+        props={savedShipments}
+        dbProps={dbShipments}
+      ></PaginationObj>
     </Box>
   );
 };
