@@ -63,7 +63,7 @@ const Home = () => {
       </VStack>
 
 
-      <Container maxW={'7xl'}>
+      <Container>
         {shipmentDetails && <ShipmentCardHome shipmentDetails={shipmentDetails} />}
       </Container >
 
