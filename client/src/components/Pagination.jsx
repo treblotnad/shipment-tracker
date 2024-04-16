@@ -28,9 +28,11 @@ function pageSlice(array, pageSize, offset) {
   return array.slice(offset, offset + pageSize);
 }
 
-function PaginationObj({ props }) {
+function PaginationObj({ props, dbProps }) {
   const [packagesTotal, setPackagesTotal] = useState(1);
   const [packages, setPackages] = useState([]);
+  const [sort, setSort] = useState("ETA-Desc");
+
   const outerLimit = 2;
   const innerLimit = 2;
 
@@ -40,8 +42,6 @@ function PaginationObj({ props }) {
     offset,
     currentPage,
     setCurrentPage,
-    setIsDisabled,
-    isDisabled,
     pageSize,
     setPageSize,
   } = usePagination({
@@ -53,11 +53,21 @@ function PaginationObj({ props }) {
       currentPage: 1,
     },
   });
+
   useEffect(() => {
     const pagePackages = pageSlice(props, pageSize, offset);
     setPackages(pagePackages);
     setPackagesTotal(props.length);
-  }, [currentPage, pageSize, offset]);
+  }, [
+    currentPage,
+    pageSize,
+    offset,
+    sort,
+    props,
+    dbProps,
+    PaginationPage,
+    pages,
+  ]);
 
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);
@@ -66,7 +76,9 @@ function PaginationObj({ props }) {
     const pageSize = Number(event.target.value);
     setPageSize(pageSize);
   };
-
+  const handleSortChange = (event) => {
+    const sort = event.target.value;
+  };
   return (
     <ChakraProvider>
       <Stack>
@@ -147,10 +159,15 @@ function PaginationObj({ props }) {
           </PaginationContainer>
         </Pagination>
         <Center>
-          <Select ml={3} onChange={handlePageSizeChange} w={40}>
+          <Select mr={10} onChange={handlePageSizeChange} w={20}>
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="20">20</option>
+          </Select>
+          <Select ml={10} w={120} onChange={handleSortChange}>
+            <option value="ETA-Desc">ETA-Desc</option>
+            <option value="ETA-Asc">ETA-Asc</option>
+            <option value=""></option>
           </Select>
         </Center>
       </Stack>
