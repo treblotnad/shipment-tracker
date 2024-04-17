@@ -17,9 +17,10 @@ import { EditIcon, CheckIcon } from "@chakra-ui/icons";
 const Account = () => {
     const { loading, data, error } = useQuery(GET_ME);
     const [updateUser] = useMutation(UPDATE_USER);
-    const [editMode, setEditMode] = useState({ username: false, email: false, password: false });
+    const [editMode, setEditMode] = useState({ firstname: false, lastname: false, email: false, password: false });
     const [formData, setFormData] = useState({
-        username: '',
+        firstname: '',
+        lastname: '',
         email: '',
         password: '********'
     });
@@ -28,13 +29,15 @@ const Account = () => {
     useEffect(() => {
         if (data && data.me) {
             setFormData({
-                username: data.me.username,
+                firstname: data.me.firstname,
+                lastname: data.me.lastname,
                 email: data.me.email,
                 password: '********'
             });
         }
     }, [data]);
 
+    // Handlers for edit, save, change
     const handleEdit = (field) => {
         setEditMode(prev => ({ ...prev, [field]: true}));
     };
@@ -45,7 +48,8 @@ const Account = () => {
             await updateUser({
                 variables: {
                     id: data.me._id,
-                    username: formData.username,
+                    firstname: formData.firstname,
+                    lastname: formData.lastname,
                     email: formData.email,
                 }
             });
