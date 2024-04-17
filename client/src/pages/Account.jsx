@@ -37,6 +37,11 @@ const Account = () => {
         }
     }, [data]);
 
+    // Helper function to capitalized the first letter
+    const capFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    }
+
     // Handlers for edit, save, change
     const handleEdit = (field) => {
         setEditMode(prev => ({ ...prev, [field]: true}));
@@ -61,7 +66,9 @@ const Account = () => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        // check if input is either firstname or lastname and capitalize it
+        const newValue = (name === 'firstname' || name === 'lastname') ? capFirstLetter(value) : value;
+        setFormData(prev => ({ ...prev, [name]: newValue }));
     };
 
     if (loading) return <Text>Loading...</Text>;
