@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_ME, UPDATE_USER } from "../utils/queries";
+import { GET_ME } from "../utils/queries";
+import { UPDATE_USER } from "../utils/mutations";
 import Auth from "../utils/auth";
 
 import {
@@ -11,7 +12,7 @@ import {
     Button,
     Flex
 } from "@chakra-ui/react";
-import { EditIcon, CheckIcon } from "@chakra-ui/react";
+import { EditIcon, CheckIcon } from "@chakra-ui/icons";
 
 const Account = () => {
     const { loading, data, error } = useQuery(GET_ME);

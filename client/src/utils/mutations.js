@@ -24,6 +24,16 @@ export const ADD_USER = gql`
   }
 `;
 
+export const UPDATE_USER = gql`
+  mutation updateUser($id: ID!, $username: String, $email: String) {
+    updateUser(id: $id, username: $username, email: $email) {
+      _id
+      username
+      email
+    }
+  }
+`;
+
 export const SAVE_SHIPMENT = gql`
   mutation saveShipment($userId: ID, $shipmentData: ShipmentInput) {
     saveShipment(userId: $userId, shipmentData: $shipmentData) {
