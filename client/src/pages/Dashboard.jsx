@@ -33,7 +33,7 @@ const Dashboard = () => {
           },
         },
       });
-      console.log(result);
+      // console.log(result);
     } catch (error) {
       console.error(error);
     }
@@ -54,7 +54,7 @@ const Dashboard = () => {
   const dbShipments = data?.me?.savedShipments;
   const savedShipments = data?.me?.hiveData || [];
 
-  console.log(data.me);
+  // console.log(data.me);
 
   return (
     <Box padding="4">

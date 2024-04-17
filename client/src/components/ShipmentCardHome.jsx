@@ -1,65 +1,83 @@
-import { dateToWeekDate, dateToShortDate } from '../utils/datetime';
-import Status from './Status';
+import { dateToWeekDate, dateToShortDate } from "../utils/datetime";
+import Status from "./Status";
 
 import {
-    Card,
-    CardHeader,
-    CardBody,
-    CardFooter,
-    Text,
-    Image,
-    Grid,
-    GridItem,
-    Box,
-    Center,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Text,
+  Image,
+  Grid,
+  GridItem,
+  Box,
+  Center,
 } from "@chakra-ui/react";
 
-import { ArrowRightIcon } from '@chakra-ui/icons';
+import { ArrowRightIcon } from "@chakra-ui/icons";
 
 const logo = {
-    'ups': '/images/ups.png',
-    'fedex': '/images/fedex.png',
-    'usps': '/images/usps.png',
-}
+  ups: "/images/ups.png",
+  fedex: "/images/fedex.png",
+  usps: "/images/usps.png",
+};
 
 export default function ShipmentCardHome({ shipmentDetails, mapImage }) {
-    return (
-        <>
-            {console.log(shipmentDetails)}
-            <Card boxShadow='dark-lg' p='6' rounded='md' bg='white' mt={12} mb={20}>
-                <CardHeader>
-                    <Grid templateColumns='100px 1.5fr 3fr 1fr 150px' gap={3} >
-
-                        {/* Logo based on the carrier, with image sources in the const above */}
-                        <GridItem>
-                            {shipmentDetails.slug === 'ups' && <Image src={logo.ups} alt='UPS' height='40px' />}
-                            {shipmentDetails.slug === 'fedex' && <Image src={logo.fedex} alt='FedEx' height='40px' />}
-                            {shipmentDetails.slug === 'usps' && <Image src={logo.usps} alt='USPS' height='40px' />}
-                        </GridItem>
-                        <GridItem alignSelf='center'>
-                            {/* <Center h='40px'> */}
-                            <Text fontWeight='bold'>{shipmentDetails.tracking_number}</Text>
-                            {/* </Center> */}
-                        </GridItem>
-                        <GridItem>
-                            <Center h='40px'>
-                                <Text fontWeight='bold'>
-                                    {shipmentDetails.trackings.address.ship_from.city}, {shipmentDetails.trackings.address.ship_from.state}  <ArrowRightIcon boxSize={8} mx={12} />{shipmentDetails.trackings.address.ship_to.city}, {shipmentDetails.trackings.address.ship_to.state}
-                                </Text>
-                            </Center>
-                        </GridItem>
-                        <GridItem align='right'>
-                            <Center h='40px'>
-                                <Text fontWeight='bold'>
-                                    {dateToWeekDate(shipmentDetails.trackings.expected_delivery) || 'Not available'}
-                                </Text>
-                            </Center>
-                        </GridItem>
-                        <GridItem align='right'>
-                            <Status status={shipmentDetails.trackings.tag} />
-                        </GridItem>
-                    </Grid>
-                </CardHeader>
+  function etaDefine() {
+    if (shipmentDetails.current_status === "Delivered") {
+      return dateToWeekDate(shipmentDetails.trackings.shipment_delivery_date);
+    } else {
+      return (
+        dateToWeekDate(shipmentDetails.trackings.expected_delivery) ||
+        "Not available"
+      );
+    }
+  }
+  const eta = etaDefine();
+  return (
+    <>
+      {console.log(shipmentDetails)}
+      <Card boxShadow="dark-lg" p="6" rounded="md" bg="white" mt={12} mb={20}>
+        <CardHeader>
+          <Grid templateColumns="100px 1.5fr 3fr 1fr 150px" gap={3}>
+            {/* Logo based on the carrier, with image sources in the const above */}
+            <GridItem>
+              {shipmentDetails.slug === "ups" && (
+                <Image src={logo.ups} alt="UPS" height="40px" />
+              )}
+              {shipmentDetails.slug === "fedex" && (
+                <Image src={logo.fedex} alt="FedEx" height="40px" />
+              )}
+              {shipmentDetails.slug === "usps" && (
+                <Image src={logo.usps} alt="USPS" height="40px" />
+              )}
+            </GridItem>
+            <GridItem alignSelf="center">
+              {/* <Center h='40px'> */}
+              <Text fontWeight="bold">{shipmentDetails.tracking_number}</Text>
+              {/* </Center> */}
+            </GridItem>
+            <GridItem>
+              <Center h="40px">
+                <Text fontWeight="bold">
+                  {shipmentDetails.trackings.address.ship_from.city},{" "}
+                  {shipmentDetails.trackings.address.ship_from.state}{" "}
+                  <ArrowRightIcon boxSize={8} mx={12} />
+                  {shipmentDetails.trackings.address.ship_to.city},{" "}
+                  {shipmentDetails.trackings.address.ship_to.state}
+                </Text>
+              </Center>
+            </GridItem>
+            <GridItem align="right">
+              <Center h="40px">
+                <Text fontWeight="bold">{eta}</Text>
+              </Center>
+            </GridItem>
+            <GridItem align="right">
+              <Status status={shipmentDetails.trackings.tag} />
+            </GridItem>
+          </Grid>
+        </CardHeader>
 
                 {/* The map on the left, and all the checkpoints on the right */}
                 <CardBody>

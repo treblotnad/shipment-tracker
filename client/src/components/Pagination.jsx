@@ -1,14 +1,12 @@
 import {
-  Box,
   Text,
   SimpleGrid,
-  Grid,
   Center,
   Select,
-  Button,
   Stack,
   ChakraProvider,
   Accordion,
+  Checkbox,
 } from "@chakra-ui/react";
 import {
   Pagination,
@@ -21,17 +19,25 @@ import {
   PaginationSeparator,
 } from "@ajna/pagination";
 import { useState, useEffect } from "react";
-
+import { dateToWeekDate, dateToShortDate } from "../utils/datetime";
 import ShipmentCard from "./shipmentCard";
 
 function pageSlice(array, pageSize, offset) {
   return array.slice(offset, offset + pageSize);
 }
-
+function etaDefine(props) {
+  //   console.log(props);
+  if (props.current_status === "Delivered") {
+    return props.trackings.shipment_delivery_date;
+  } else {
+    return props.trackings.expected_delivery || "Not available";
+  }
+}
 function PaginationObj({ props, dbProps }) {
   const [packagesTotal, setPackagesTotal] = useState(1);
-  const [packages, setPackages] = useState([]);
   const [sort, setSort] = useState("ETA-Desc");
+  const [checkedItems, setCheckedItems] = useState([true, true]);
+  const [packages, setPackages] = useState(props);
 
   const outerLimit = 2;
   const innerLimit = 2;
@@ -53,11 +59,54 @@ function PaginationObj({ props, dbProps }) {
       currentPage: 1,
     },
   });
+  function checkFilter(packages) {
+    if (checkedItems[0] && checkedItems[1]) {
+      return packages;
+    }
+    if (!checkedItems[0] && checkedItems[1]) {
+      return packages.filter(
+        (packageIndex) => !(packageIndex.current_status == "Delivered")
+      );
+    }
+    if (checkedItems[0] && !checkedItems[1]) {
+      return packages.filter(
+        (packageIndex) => packageIndex.current_status == "Delivered"
+      );
+    }
+    if (!checkedItems[0] && !checkedItems[1]) {
+      return [];
+    }
+  }
 
   useEffect(() => {
     const pagePackages = pageSlice(props, pageSize, offset);
     setPackages(pagePackages);
     setPackagesTotal(props.length);
+    const packagesTemp = checkFilter(props);
+    // const eta = packagesTemp.map((packTemp) => etaDefine(packTemp));
+    // const packagesEta = { packagesTemp, eta };
+
+    function etaObjCreator() {
+      let packagesEta = [];
+      for (let i = 0; i < packagesTemp.length; i++) {
+        let eta = etaDefine(packagesTemp[i]);
+        // console.log(eta);
+        let packageIndex = packagesTemp[i];
+        packagesEta[i] = { eta, ...packageIndex };
+      }
+      return packagesEta;
+    }
+    const packagesEta = etaObjCreator();
+     packagesEta.sort(function (a, b) {
+      if (sort === "ETA-Desc") {
+        return new Date(b.eta) - new Date(a.eta);
+      } else {
+        return new Date(a.eta) - new Date(b.eta);
+      }
+    });
+    // console.log(packagesSorted);
+    console.log(packagesEta);
+    setPackages(packagesEta);
   }, [
     currentPage,
     pageSize,
@@ -67,6 +116,7 @@ function PaginationObj({ props, dbProps }) {
     dbProps,
     PaginationPage,
     pages,
+    checkedItems,
   ]);
 
   const handlePageChange = (nextPage) => {
@@ -77,7 +127,7 @@ function PaginationObj({ props, dbProps }) {
     setPageSize(pageSize);
   };
   const handleSortChange = (event) => {
-    const sort = event.target.value;
+    setSort(event.target.value);
   };
   return (
     <ChakraProvider>
@@ -90,6 +140,7 @@ function PaginationObj({ props, dbProps }) {
                 key={shipment.mongoId}
                 tracking_number={shipment.tracking_number}
                 slug={shipment.slug}
+                props={shipment}
               >
                 test
               </ShipmentCard>
@@ -167,8 +218,25 @@ function PaginationObj({ props, dbProps }) {
           <Select ml={10} w={120} onChange={handleSortChange}>
             <option value="ETA-Desc">ETA-Desc</option>
             <option value="ETA-Asc">ETA-Asc</option>
-            <option value=""></option>
           </Select>
+          <Stack ml={20}>
+            <Checkbox
+              isChecked={checkedItems[0]}
+              onChange={(e) =>
+                setCheckedItems([e.target.checked, checkedItems[1]])
+              }
+            >
+              Delivered
+            </Checkbox>
+            <Checkbox
+              isChecked={checkedItems[1]}
+              onChange={(e) =>
+                setCheckedItems([checkedItems[0], e.target.checked])
+              }
+            >
+              In Transit
+            </Checkbox>
+          </Stack>
         </Center>
       </Stack>
     </ChakraProvider>

@@ -1,17 +1,48 @@
-import { Button } from '@chakra-ui/react';
+import { Badge } from "@chakra-ui/react";
 
 export default function Status({ status }) {
+  const statusBadge = {
+    Pending: (
+      <Badge colorScheme="yellow" size="sm">
+        Pending
+      </Badge>
+    ),
+    InTransit: (
+      <Badge colorScheme="blue" size="sm">
+        In Transit
+      </Badge>
+    ),
+    OutForDelivery: (
+      <Badge colorScheme="orange" size="sm">
+        Out for Delivery
+      </Badge>
+    ),
+    Delivered: (
+      <Badge colorScheme="green" size="sm">
+        Delivered
+      </Badge>
+    ),
+    FailedAttempt: (
+      <Badge colorScheme="red" size="sm">
+        Failed Attempt
+      </Badge>
+    ),
+    Exception: (
+      <Badge colorScheme="red" size="sm">
+        Exception
+      </Badge>
+    ),
+    Expired: (
+      <Badge colorScheme="red" size="sm">
+        Expired
+      </Badge>
+    ),
+    InfoReceived: (
+      <Badge colorScheme="cyan" size="sm">
+        Info Received
+      </Badge>
+    ),
+  };
 
-    const statusButton = {
-        Pending: <Button colorScheme='yellow' size='sm'>Pending</Button>,
-        InTransit: <Button colorScheme='blue' size='sm'>In Transit</Button>,
-        OutForDelivery: <Button colorScheme='orange' size='sm'>Out for Delivery</Button>,
-        Delivered: <Button colorScheme='green' size='sm'>Delivered</Button>,
-        FailedAttempt: <Button colorScheme='red' size='sm'>Failed Attempt</Button>,
-        Exception: <Button colorScheme='red' size='sm'>Exception</Button>,
-        Expired: <Button colorScheme='red' size='sm'>Expired</Button>,
-        InfoReceived: <Button colorScheme='cyan' size='sm'>Info Received</Button>,
-    };
-
-    return statusButton[status] || <Button size='sm'>Unknown Status</Button>;
+  return statusBadge[status] || <Badge fontSize=".9rem">Unknown Status</Badge>;
 }
