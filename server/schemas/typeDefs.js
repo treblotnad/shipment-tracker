@@ -112,6 +112,11 @@ type Mutation {
         userId: ID!,
         shipmentId: ID!
         ): User
+    updateUser(
+        id: ID!,
+        username: String,
+        email: String
+    ): User
 }
 
 `;

@@ -18,20 +18,24 @@ import {
 const Home = () => {
 
   const [shipmentDetails, setShipmentDetails] = useState(null);
+  const [mapImage, setMapImage] = useState(null);
   const [error, setError] = useState(null);
 
-  const handleResults = (data) => {
-    setShipmentDetails(data);
+  const handleResults = (shipmentDetails, image) => {
+    setShipmentDetails(shipmentDetails);
+    setMapImage(image);
     setError(null);
   };
 
   const handleError = (message) => {
     setError(message);
     setShipmentDetails(null);
+    setMapImage(null);
   };
 
   const handleInputClear = () => {
     setShipmentDetails(null);  // clear existing shipment details when new input is started
+    setMapImage(null); // 
   };
 
   return (
@@ -50,7 +54,7 @@ const Home = () => {
       <VStack spacing={1} justify='center'>
         <Box w={{ base: "100%", md: "70%" }} >
           <SearchTrackingHome
-            onResults={setShipmentDetails}
+            onResults={handleResults}
             onError={setError}
             onInputClear={handleInputClear}
           />
@@ -64,7 +68,7 @@ const Home = () => {
 
 
       <Container>
-        {shipmentDetails && <ShipmentCardHome shipmentDetails={shipmentDetails} />}
+        {shipmentDetails && <ShipmentCardHome shipmentDetails={shipmentDetails} mapImage={mapImage} />}
       </Container >
 
     </Container >

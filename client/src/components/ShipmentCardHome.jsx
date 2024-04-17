@@ -22,7 +22,7 @@ const logo = {
   usps: "/images/usps.png",
 };
 
-export default function ShipmentCardHome({ shipmentDetails }) {
+export default function ShipmentCardHome({ shipmentDetails, mapImage }) {
   function etaDefine() {
     if (shipmentDetails.current_status === "Delivered") {
       return dateToWeekDate(shipmentDetails.trackings.shipment_delivery_date);
@@ -79,44 +79,42 @@ export default function ShipmentCardHome({ shipmentDetails }) {
           </Grid>
         </CardHeader>
 
-        {/* The map on the left, and all the checkpoints on the right */}
-        <CardBody>
-          <Grid templateColumns="1fr 2fr" gap={4}>
-            <GridItem>
-              <Image src="images/map.jpg" alt="Map" />
-              <Text color="gray" fontSize="sm" mt={2}>
-                <strong>{shipmentDetails.trackings.shipment_type || ""}</strong>{" "}
-                • Shipped on{" "}
-                {dateToWeekDate(shipmentDetails.trackings.shipment_pickup_date)}
-              </Text>
-            </GridItem>
+                {/* The map on the left, and all the checkpoints on the right */}
+                <CardBody>
+                    <Grid templateColumns='1fr 2fr' gap={4} >
+                        <GridItem>
+                            <Image src={mapImage} alt="Shipment Map" />
+                            <Text color='gray' fontSize='sm' mt={2}>
+                                <strong>{shipmentDetails.trackings.shipment_type || ''}</strong> • Shipped on {dateToWeekDate(shipmentDetails.trackings.shipment_pickup_date)}
+                            </Text>
+                        </GridItem>
 
-            <GridItem>
-              {/* Each checkpoint and message */}
-              <Grid templateColumns="repeat(3, 1fr)" gap={1}>
-                {shipmentDetails.trackings.checkpoints.map(
-                  (checkpoint, index) => {
-                    if (index === 0) return null; // Skip the first checkpoint
-                    return (
-                      <GridItem key={index}>
-                        <Box pl={3} pb={5}>
-                          <Text mb={0}>
-                            {dateToShortDate(checkpoint.checkpoint_time)}:{" "}
-                            {checkpoint.city}, {checkpoint.state}
-                          </Text>
-                          <Text as="i" color="gray">
-                            {checkpoint.message}
-                          </Text>
-                        </Box>
-                      </GridItem>
-                    );
-                  }
-                )}
-              </Grid>
-            </GridItem>
-          </Grid>
-        </CardBody>
-      </Card>
-    </>
-  );
-}
+                        <GridItem>
+
+                            {/* Each checkpoint and message */}
+                            <Grid templateColumns='repeat(3, 1fr)' gap={1}>
+
+
+                                {shipmentDetails.trackings.checkpoints.map((checkpoint, index) => {
+                                    if (index === 0 || checkpoint.location == '') return null; // Skip the first checkpoint
+                                    return (
+                                        <GridItem key={index}>
+                                            <Box pl={3} pb={5}>
+                                                <Text mb={0}>
+                                                    {dateToShortDate(checkpoint.checkpoint_time)}: {checkpoint.location.trim()}
+                                                </Text>
+                                                <Text as='i' color='gray' >
+                                                    {checkpoint.message}
+                                                </Text>
+                                            </Box>
+                                        </GridItem>
+                                    );
+                                })}
+                            </Grid>
+                        </GridItem>
+                    </Grid>
+                </CardBody>
+            </Card >
+        </>
+    );
+};
