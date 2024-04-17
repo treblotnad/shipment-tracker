@@ -13,7 +13,10 @@ import {
 } from "@chakra-ui/react";
 
 export default function ShipmentCard({ shipmentId, tracking_number, slug }) {
-  const [removeShipment] = useMutation(REMOVE_SHIPMENT);
+  const [removeShipment] = useMutation(REMOVE_SHIPMENT, {
+    refetchQueries: ["me"],
+  });
+
 
   const handleRemoveShipment = async () => {
     if (!Auth.loggedIn()) {
@@ -34,23 +37,23 @@ export default function ShipmentCard({ shipmentId, tracking_number, slug }) {
     }
   };
   return (
-      <AccordionItem>
-        <AccordionButton>
-          <Box as="span" flex="1" textAlign="left">
-            <Text fontSize="lg" fontWeight="bold">
-              Tracking: {tracking_number || "N/A"}
-            </Text>
-          </Box>
+    <AccordionItem>
+      <AccordionButton>
+        <Box as="span" flex="1" textAlign="left">
+          <Text fontSize="lg" fontWeight="bold">
+            Tracking: {tracking_number || "N/A"}
+          </Text>
+        </Box>
 
-          <AccordionIcon />
-        </AccordionButton>
+        <AccordionIcon />
+      </AccordionButton>
 
-        <AccordionPanel>
-          <Text fontSize="lg">Carrier: {slug || "N/A"}</Text>
-          <Button colorScheme="red" onClick={handleRemoveShipment}>
-            Remove
-          </Button>
-        </AccordionPanel>
-      </AccordionItem>
+      <AccordionPanel>
+        <Text fontSize="lg">Carrier: {slug || "N/A"}</Text>
+        <Button colorScheme="red" onClick={handleRemoveShipment}>
+          Remove
+        </Button>
+      </AccordionPanel>
+    </AccordionItem>
   );
 }

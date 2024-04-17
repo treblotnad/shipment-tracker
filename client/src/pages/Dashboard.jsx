@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
 import { REMOVE_SHIPMENT } from "../utils/mutations";
@@ -10,7 +10,7 @@ import SearchTracking from "../components/SearchTracking";
 import ShipmentCard from "../components/shipmentCard";
 import PaginationObj from "../components/pagination";
 
-import { Box, Text, SimpleGrid } from "@chakra-ui/react";
+import { Box, Text, SimpleGrid, Skeleton } from "@chakra-ui/react";
 
 const Dashboard = () => {
   const { loading, data, error } = useQuery(GET_ME);
@@ -40,13 +40,18 @@ const Dashboard = () => {
   };
 
   if (loading) {
-    return <Text>Loading...</Text>;
+    return (
+      <>
+        <Text>Loading...</Text>
+        <Skeleton height="6000px"></Skeleton>
+      </>
+    );
   }
 
   if (error) {
     return <Text>Load Error: {error.message}</Text>;
   }
-
+  const dbShipments = data?.me?.savedShipments;
   const savedShipments = data?.me?.hiveData || [];
 
   console.log(data.me);
@@ -57,19 +62,10 @@ const Dashboard = () => {
         Your Shipments
       </Text>
       <SearchTracking onSaveShipment={handleSaveShipment} />
-      <PaginationObj props={savedShipments}></PaginationObj>
-
-      {/* <SimpleGrid columns={{ sm: 1, md: 1, lg: 1 }} spacing={5}>
-        {savedShipments.map((shipment) => (
-          <ShipmentCard
-            shipmentId={shipment.mongoId}
-            userId={data.me._id}
-            key={shipment.mongoId}
-            tracking={shipment.tracking_number}
-            carrier={shipment.slug}
-          />
-        ))}
-      </SimpleGrid> */}
+      <PaginationObj
+        props={savedShipments}
+        dbProps={dbShipments}
+      ></PaginationObj>
     </Box>
   );
 };

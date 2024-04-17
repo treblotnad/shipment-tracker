@@ -28,6 +28,9 @@ const AppNavbar = () => {
                                     <Nav.Link as={Link} to='/dashboard'>
                                         Dashboard
                                     </Nav.Link>
+                                    <Nav.Link as={Link} to='/account'>
+                                        Account
+                                    </Nav.Link>
                                     <Button onClick={Auth.logout}>Logout</Button>
                                 </>
                             ) : (

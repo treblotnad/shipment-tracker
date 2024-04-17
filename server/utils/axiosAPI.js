@@ -1,5 +1,12 @@
 const axios = require("axios");
 require("dotenv").config({ path: require("find-config")(".env") });
+const rateLimit = require("axios-rate-limit");
+
+const axiosRL = rateLimit(axios.create(), {
+  maxRequests: 7,
+  perMilliseconds: 1000,
+  makRPS: 7,
+});
 
 const getId = async (tracking, carrier) => {
   try {
@@ -28,7 +35,7 @@ const getId = async (tracking, carrier) => {
 
 const getTracking = async (hiveId) => {
   try {
-    const { data } = await axios.get(
+    const { data } = await axiosRL.get(
       "https://api.trackinghive.com/trackings/" + hiveId,
       {
         headers: {
@@ -36,7 +43,7 @@ const getTracking = async (hiveId) => {
           Authorization: process.env.AUTHORIZATION,
         },
         validateStatus(status) {
-          return status < 400;
+          return status < 400 || status === 429;
         },
       }
     );

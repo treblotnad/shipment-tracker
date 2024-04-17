@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import App from './App.jsx'
 import Home from './pages/Home'
 import Dashboard from './pages/Dashboard.jsx'
+import Account from './pages/Account.jsx'
 
 const router = createBrowserRouter([
     {
@@ -18,6 +19,9 @@ const router = createBrowserRouter([
             }, {
                 path: '/dashboard',
                 element: <Dashboard />
+            }, {
+                path: '/account',
+                element: <Account />
             }
         ]
     }

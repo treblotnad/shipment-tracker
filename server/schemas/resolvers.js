@@ -1,8 +1,6 @@
 const { User, Shipment } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
 const { getId, getTracking } = require("../utils/axiosAPI");
-const { promisify } = require("util");
-const setTimeoutAsync = promisify(setTimeout);
 const axios = require("axios");
 require("dotenv").config();
 
@@ -38,8 +36,8 @@ const resolvers = {
           response.hiveData = await Promise.all(
             response.savedShipments.map(async (shipment) => {
               let hiveData = await getTracking(shipment.hiveId);
+
               hiveData.mongoId = shipment._id;
-              setTimeoutAsync(100);
 
               // console.log(hiveData.mongoId);
               return hiveData;
@@ -106,7 +104,7 @@ const resolvers = {
           { $push: { savedShipments: shipmentData } },
           { new: true }
         );
-        console.log(hiveId);
+        
         return user;
       } catch (e) {
         console.error(e.reponse);
