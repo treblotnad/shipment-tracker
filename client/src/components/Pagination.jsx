@@ -25,14 +25,14 @@ import ShipmentCard from "./shipmentCard";
 function pageSlice(array, pageSize, offset) {
   return array.slice(offset, offset + pageSize);
 }
-// function etaDefine(props) {
-//   console.log(props);
-//   if (props.current_status === "Delivered") {
-//     return props.trackings.shipment_delivery_date;
-//   } else {
-//     return props.trackings.expected_delivery || "Not available";
-//   }
-// }
+function etaDefine(props) {
+  //   console.log(props);
+  if (props.current_status === "Delivered") {
+    return props.trackings.shipment_delivery_date;
+  } else {
+    return props.trackings.expected_delivery || "Not available";
+  }
+}
 function PaginationObj({ props, dbProps }) {
   const [packagesTotal, setPackagesTotal] = useState(1);
   const [sort, setSort] = useState("ETA-Desc");
@@ -82,9 +82,31 @@ function PaginationObj({ props, dbProps }) {
     const pagePackages = pageSlice(props, pageSize, offset);
     setPackages(pagePackages);
     setPackagesTotal(props.length);
-    const packageTemp = checkFilter(props);
-    setPackages(packageTemp);
-    console.log(packageTemp);
+    const packagesTemp = checkFilter(props);
+    // const eta = packagesTemp.map((packTemp) => etaDefine(packTemp));
+    // const packagesEta = { packagesTemp, eta };
+
+    function etaObjCreator() {
+      let packagesEta = [];
+      for (let i = 0; i < packagesTemp.length; i++) {
+        let eta = etaDefine(packagesTemp[i]);
+        // console.log(eta);
+        let packageIndex = packagesTemp[i];
+        packagesEta[i] = { eta, ...packageIndex };
+      }
+      return packagesEta;
+    }
+    const packagesEta = etaObjCreator();
+     packagesEta.sort(function (a, b) {
+      if (sort === "ETA-Desc") {
+        return new Date(b.eta) - new Date(a.eta);
+      } else {
+        return new Date(a.eta) - new Date(b.eta);
+      }
+    });
+    // console.log(packagesSorted);
+    console.log(packagesEta);
+    setPackages(packagesEta);
   }, [
     currentPage,
     pageSize,
