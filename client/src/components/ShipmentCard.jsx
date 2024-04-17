@@ -18,6 +18,8 @@ import {
   Center,
   Image,
   SimpleGrid,
+  Flex,
+  Spacer,
 } from "@chakra-ui/react";
 const logo = {
   ups: "/images/ups.png",
@@ -35,7 +37,7 @@ export default function ShipmentCard({
   const [removeShipment] = useMutation(REMOVE_SHIPMENT, {
     refetchQueries: ["me"],
   });
-  console.log(props);
+//   console.log(props);
   const handleRemoveShipment = async () => {
     if (!Auth.loggedIn()) {
       console.error("Not logged in");
@@ -97,16 +99,18 @@ export default function ShipmentCard({
               </Text>
             </Center>
           </GridItem>
+
           <GridItem align="right">
             <Center h="40px">
               <Text fontWeight="bold">{eta}</Text>
             </Center>
           </GridItem>
+
           <GridItem align="right">
             <Status status={props.current_status} />
+            <AccordionIcon />
           </GridItem>
         </Grid>
-        <AccordionIcon />
       </AccordionButton>
 
       <AccordionPanel>
