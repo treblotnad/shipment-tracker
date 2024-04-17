@@ -24,7 +24,7 @@ export default function SearchTracking({ onSaveShipment }) {
 
   const handleSaveShipment = (e) => {
     e.preventDefault();
-    console.log(input);
+    // console.log(input);
     if (input.length < 10) {
       setIsError(true);
       setErrorMessage("Tracking number must be at least 10 characters long");
