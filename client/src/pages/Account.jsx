@@ -68,6 +68,27 @@ const Account = () => {
         <Text fontSize="2x1" mb="4">
             My Account
         </Text>
+        {Object.keys(formData).map((key) => (
+            <Flex key={key} align="center" mb="4">
+                <Text w="150px" fontWeight="bold">{key.charAt(0).toUpperCase() + key.slice(1)}:</Text>
+                {editMode[key] ? (
+                    <Input
+                        name={key}
+                        value={formData[key]}
+                        onChange={handleChange}
+                        mr={2}
+                    />
+                ) : (
+                    <Text mr={2}>{formData[key]}</Text>
+                )}
+                <IconButton
+                    aria-label={editMode[key] ? 'Save' : 'Edit'}
+                    icon={editMode[key] ? <CheckIcon /> : <EditIcon />}
+                    onClick={() => editMode[key] ? handleSave(key) : handleEdit(key)}
+                />
+            </Flex>
+        ))}
+
         <Flex direction="column" gap="20px">
             <Box>
                 <Text fontWeight="bold">Username:</Text>
