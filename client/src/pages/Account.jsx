@@ -49,7 +49,7 @@ const Account = () => {
                     email: formData.email,
                 }
             });
-            console.log('Data updated successfully !');
+            alert('Changes Saved Successfully!');
         } catch (error) {
             console.error('Error updating user:', error);
         }
@@ -65,7 +65,7 @@ const Account = () => {
     
     return (
        <Box p={5}>
-        <Text fontSize="2x1" mb="4">
+        <Text fontSize="25px" mb="4" marginBottom="40px">
             My Account
         </Text>
         {Object.keys(formData).map((key) => (
@@ -79,7 +79,7 @@ const Account = () => {
                         mr={2}
                     />
                 ) : (
-                    <Text mr={2}>{formData[key]}</Text>
+                    <Input backgroundColor="lightgrey" width="350px" mr={2} value={formData[key]} isReadOnly />
                 )}
                 <IconButton
                     aria-label={editMode[key] ? 'Save' : 'Edit'}
@@ -88,21 +88,6 @@ const Account = () => {
                 />
             </Flex>
         ))}
-
-        <Flex direction="column" gap="20px">
-            <Box>
-                <Text fontWeight="bold">Username:</Text>
-                <Input value={formData.username} isReadOnly />
-            </Box>
-            <Box>
-                <Text fontWeight="bold">Email:</Text>
-                <Input value={formData.email} isReadOnly />
-            </Box>
-            <Box>
-                <Text fontWeight="bold">Password:</Text>
-                <Input value={formData.password} isReadOnly/>
-            </Box>
-        </Flex>
        </Box> 
     );
 };
