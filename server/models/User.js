@@ -6,10 +6,13 @@ const shipmentSchema = require('./Shipment');
 
 const userSchema = new Schema(
   {
-    username: {
+    firstname: {
       type: String,
       required: true,
       unique: true,
+    },
+    lastname: {
+      type: String
     },
     email: {
       type: String,
