@@ -72,17 +72,18 @@ export default function ShipmentCardHome({ shipmentDetails, mapImage }) {
                         </GridItem>
 
                         <GridItem>
+
                             {/* Each checkpoint and message */}
                             <Grid templateColumns='repeat(3, 1fr)' gap={1}>
 
 
                                 {shipmentDetails.trackings.checkpoints.map((checkpoint, index) => {
-                                    if (index === 0) return null; // Skip the first checkpoint
+                                    if (index === 0 || checkpoint.location == '') return null; // Skip the first checkpoint
                                     return (
                                         <GridItem key={index}>
                                             <Box pl={3} pb={5}>
                                                 <Text mb={0}>
-                                                    {dateToShortDate(checkpoint.checkpoint_time)}: {checkpoint.city}, {checkpoint.state}
+                                                    {dateToShortDate(checkpoint.checkpoint_time)}: {checkpoint.location.trim()}
                                                 </Text>
                                                 <Text as='i' color='gray' >
                                                     {checkpoint.message}
