@@ -92,6 +92,25 @@ const resolvers = {
       return { token, user };
     },
 
+    // update user
+    updateUser: async (parent, { id, username, email }, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('Not authorized');
+      }
+
+      const updatedUser = await User.findByIdAndUpdate(
+        id,
+        { $set: { username: username, email: email } },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        throw new Error('User not found');
+      }
+
+      return updatedUser
+    },
+
     // save a shipment to a user's `savedShipments` field by adding it to the set (to prevent duplicates)
     saveShipment: async (_, { userId, shipmentData }, context) => {
       try {
