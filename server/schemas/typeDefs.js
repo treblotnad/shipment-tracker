@@ -2,7 +2,8 @@ const typeDefs = `#graphql
 
 type User {
     _id: ID!
-    username: String
+    firstname: String
+    lastname: String
     email: String
     shipmentCount: Int
     savedShipments: [Shipment]
@@ -81,9 +82,9 @@ type Auth {
 
 type Query {
     users: [User]
-    user(username: String!): User
+    user(firstname: String!): User
     me: User
-    shipments(username: String): [Shipment]
+    shipments(firstname: String): [Shipment]
     shipment(shipmentId: ID!): Shipment
     getTrackingInfo(tracking: String!, carrier: String!): Shipment
 }
@@ -96,7 +97,8 @@ input ShipmentInput {
 
 type Mutation {
     addUser(
-        username: String!, 
+        firstname: String!,
+        lastname: String!,
         email: String!, 
         password: String!
         ): Auth
@@ -114,7 +116,8 @@ type Mutation {
         ): User
     updateUser(
         id: ID!,
-        username: String,
+        firstname: String,
+        lastname: String,
         email: String
     ): User
 }
