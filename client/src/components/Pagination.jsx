@@ -82,7 +82,7 @@ function PaginationObj({ props, dbProps }) {
     const pagePackages = pageSlice(props, pageSize, offset);
     setPackages(pagePackages);
     setPackagesTotal(props.length);
-    const packageTemp = checkFilter(packages);
+    const packageTemp = checkFilter(props);
     setPackages(packageTemp);
     console.log(packageTemp);
   }, [
