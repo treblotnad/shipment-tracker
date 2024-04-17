@@ -90,6 +90,7 @@ function PaginationObj({ props, dbProps }) {
                 key={shipment.mongoId}
                 tracking_number={shipment.tracking_number}
                 slug={shipment.slug}
+                props={shipment}
               >
                 test
               </ShipmentCard>
