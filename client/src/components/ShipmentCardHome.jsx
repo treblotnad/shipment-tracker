@@ -22,7 +22,7 @@ const logo = {
     'usps': '/images/usps.png',
 }
 
-export default function ShipmentCardHome({ shipmentDetails }) {
+export default function ShipmentCardHome({ shipmentDetails, mapImage }) {
     return (
         <>
             {console.log(shipmentDetails)}
@@ -65,7 +65,7 @@ export default function ShipmentCardHome({ shipmentDetails }) {
                 <CardBody>
                     <Grid templateColumns='1fr 2fr' gap={4} >
                         <GridItem>
-                            <Image src='images/map.jpg' alt='Map' />
+                            <Image src={mapImage} alt="Shipment Map" />
                             <Text color='gray' fontSize='sm' mt={2}>
                                 <strong>{shipmentDetails.trackings.shipment_type || ''}</strong> • Shipped on {dateToWeekDate(shipmentDetails.trackings.shipment_pickup_date)}
                             </Text>

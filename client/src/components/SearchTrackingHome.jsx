@@ -29,11 +29,13 @@ export default function SearchTrackingHome({ onResults, onError, onInputClear })
                 tracking: trackingNumber,
                 carrier
             });
-            const shipmentData = response.data;
+            const shipmentData = response.data.shipmentDetails;
+            const mapImage = response.data.image;
+
             if (!shipmentData || shipmentData.trackings.tag === 'Pending') {
                 onError('No shipment found or the shipment is currently pending.');
             } else {
-                onResults(response.data);
+                onResults(shipmentData, mapImage);
             }
 
         } catch (error) {
@@ -69,6 +71,3 @@ export default function SearchTrackingHome({ onResults, onError, onInputClear })
         </FormControl>
     );
 };
-
-
-
