@@ -66,6 +66,8 @@ const Account = () => {
 
     if (loading) return <Text>Loading...</Text>;
     if (error) return <Text>Error loading your data!</Text>;
+
+    console.log(data.me);
     
     return (
        <Box p={5}>

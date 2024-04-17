@@ -15,9 +15,16 @@ const SignupForm = () => {
 
     const [addUser] = useMutation(ADD_USER);
 
+    // Helper function to capitalized the first letter
+    const capFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    }
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setUserFormData({ ...userFormData, [name]: value });
+        // check if input is either firstname or lastname and capitalize it
+        const newValue = (name === 'firstname' || name === 'lastname') ? capFirstLetter(value) : value;
+        setUserFormData({ ...userFormData, [name]: newValue });
     };
 
     const handleFormSubmit = async (event) => {
