@@ -86,21 +86,21 @@ const resolvers = {
     },
 
     // create a user, sign a token, and send it back (to client/src/components/SignUpForm.js)
-    addUser: async (parent, { username, email, password }) => {
-      const user = await User.create({ username, email, password });
+    addUser: async (parent, { firstname, lastname, email, password }) => {
+      const user = await User.create({ firstname, lastname, email, password });
       const token = signToken(user);
       return { token, user };
     },
 
     // update user
-    updateUser: async (parent, { id, username, email }, context) => {
+    updateUser: async (parent, { id, firstname, lastname, email }, context) => {
       if (!context.user) {
         throw new AuthenticationError('Not authorized');
       }
 
       const updatedUser = await User.findByIdAndUpdate(
         id,
-        { $set: { username: username, email: email } },
+        { $set: { firstname: firstname, lastname: lastname, email: email} },
         { new: true }
       );
 

@@ -7,7 +7,7 @@ import Auth from '../utils/auth';
 
 const SignupForm = () => {
     // set initial form state
-    const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
+    const [userFormData, setUserFormData] = useState({ firstname: '', lastname: '', email: '', password: '' });
     // set state for form validation
     const [validated] = useState(false);
     // set state for alert
@@ -15,9 +15,16 @@ const SignupForm = () => {
 
     const [addUser] = useMutation(ADD_USER);
 
+    // Helper function to capitalized the first letter
+    const capFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    }
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setUserFormData({ ...userFormData, [name]: value });
+        // check if input is either firstname or lastname and capitalize it
+        const newValue = (name === 'firstname' || name === 'lastname') ? capFirstLetter(value) : value;
+        setUserFormData({ ...userFormData, [name]: newValue });
     };
 
     const handleFormSubmit = async (event) => {
@@ -42,7 +49,8 @@ const SignupForm = () => {
         }
 
         setUserFormData({
-            username: '',
+            firstname: '',
+            lastname: '',
             email: '',
             password: '',
         });
@@ -58,16 +66,29 @@ const SignupForm = () => {
                 </Alert>
 
                 <Form.Group className='mb-3'>
-                    <Form.Label htmlFor='username'>Username</Form.Label>
+                    <Form.Label htmlFor='firstname'>First Name</Form.Label>
                     <Form.Control
                         type='text'
-                        placeholder='Your username'
-                        name='username'
+                        placeholder='Your First Name'
+                        name='firstname'
                         onChange={handleInputChange}
-                        value={userFormData.username}
+                        value={userFormData.firstname}
                         required
                     />
-                    <Form.Control.Feedback type='invalid'>Username is required!</Form.Control.Feedback>
+                    <Form.Control.Feedback type='invalid'>First name is required!</Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className='mb-3'>
+                    <Form.Label htmlFor='lastname'>Last Name</Form.Label>
+                    <Form.Control
+                        type='text'
+                        placeholder='Your Last Name'
+                        name='lastname'
+                        onChange={handleInputChange}
+                        value={userFormData.lastname}
+                        required
+                    />
+                    <Form.Control.Feedback type='invalid'>Last name is required!</Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group className='mb-3'>
@@ -96,7 +117,7 @@ const SignupForm = () => {
                     <Form.Control.Feedback type='invalid'>Password is required!</Form.Control.Feedback>
                 </Form.Group>
                 <Button
-                    disabled={!(userFormData.username && userFormData.email && userFormData.password)}
+                    disabled={!(userFormData.firstname && userFormData.lastname && userFormData.email && userFormData.password)}
                     type='submit'
                     variant='success'>
                     Submit

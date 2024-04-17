@@ -6,11 +6,15 @@ import LoginForm from './LoginForm';
 import Auth from '../utils/auth';
 import NavLogo from './Logo';
 import { Box, Text, Button } from '@chakra-ui/react';
+import { useQuery } from '@apollo/client';
+import { GET_ME } from '../utils/queries';
 
 
 const AppNavbar = () => {
     // set modal display state
     const [showModal, setShowModal] = useState(false);
+    // Gets the user's data
+    const { loading, data, error } = useQuery(GET_ME);
 
     return (
         <>
@@ -25,6 +29,9 @@ const AppNavbar = () => {
 
                             {Auth.loggedIn() ? (
                                 <>
+                                    <Text px={2} paddingRight="30px" paddingTop="5px" textColor="grey" fontSize="19px">
+                                        Hello, {data.me.firstname}
+                                    </Text>
                                     <Nav.Link as={Link} to='/dashboard'>
                                         Dashboard
                                     </Nav.Link>

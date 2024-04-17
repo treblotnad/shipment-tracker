@@ -17,9 +17,10 @@ import { EditIcon, CheckIcon } from "@chakra-ui/icons";
 const Account = () => {
     const { loading, data, error } = useQuery(GET_ME);
     const [updateUser] = useMutation(UPDATE_USER);
-    const [editMode, setEditMode] = useState({ username: false, email: false, password: false });
+    const [editMode, setEditMode] = useState({ firstname: false, lastname: false, email: false, password: false });
     const [formData, setFormData] = useState({
-        username: '',
+        firstname: '',
+        lastname: '',
         email: '',
         password: '********'
     });
@@ -28,13 +29,20 @@ const Account = () => {
     useEffect(() => {
         if (data && data.me) {
             setFormData({
-                username: data.me.username,
+                firstname: data.me.firstname,
+                lastname: data.me.lastname,
                 email: data.me.email,
                 password: '********'
             });
         }
     }, [data]);
 
+    // Helper function to capitalized the first letter
+    const capFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    }
+
+    // Handlers for edit, save, change
     const handleEdit = (field) => {
         setEditMode(prev => ({ ...prev, [field]: true}));
     };
@@ -45,7 +53,8 @@ const Account = () => {
             await updateUser({
                 variables: {
                     id: data.me._id,
-                    username: formData.username,
+                    firstname: formData.firstname,
+                    lastname: formData.lastname,
                     email: formData.email,
                 }
             });
@@ -57,11 +66,15 @@ const Account = () => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        // check if input is either firstname or lastname and capitalize it
+        const newValue = (name === 'firstname' || name === 'lastname') ? capFirstLetter(value) : value;
+        setFormData(prev => ({ ...prev, [name]: newValue }));
     };
 
     if (loading) return <Text>Loading...</Text>;
     if (error) return <Text>Error loading your data!</Text>;
+
+    console.log(data.me);
     
     return (
        <Box p={5}>
