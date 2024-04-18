@@ -85,7 +85,7 @@ const AppNavbar = () => {
             </Flex>
 
             {/* Login modal */}
-            <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)} size='xl'>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalBody>

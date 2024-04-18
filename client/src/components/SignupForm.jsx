@@ -48,66 +48,68 @@ const SignupForm = () => {
             <Box>
                 <Stack spacing="6" textAlign="center">
                     <Heading size="lg" bgGradient="linear(to-l, #7928CA, #FF0080)" bgClip="text" pb='10'>
-                        Sign Up
+                        Sign Up for an account
                     </Heading>
                 </Stack>
 
-                <form onSubmit={handleSubmit}>
-                    {showAlert && (
-                        <Alert status="error" mb={4}>
-                            Something went wrong with your signup!
-                        </Alert>
-                    )}
+                <Box py={{ base: '0', sm: '8' }} px={{ base: '4', sm: '10' }} bg="bg.surface" boxShadow="xl" borderRadius="xl">
+                    <form onSubmit={handleSubmit}>
+                        {showAlert && (
+                            <Alert status="error" mb={4}>
+                                Something went wrong with your signup!
+                            </Alert>
+                        )}
 
-                    <FormControl id="firstname" isRequired>
-                        <FormLabel>First Name</FormLabel>
-                        <Input
-                            type="text"
-                            name="firstname"
-                            value={userFormData.firstname}
-                            onChange={handleInputChange}
-                        />
-                    </FormControl>
+                        <FormControl id="firstname" isRequired>
+                            <FormLabel>First Name</FormLabel>
+                            <Input
+                                type="text"
+                                name="firstname"
+                                value={userFormData.firstname}
+                                onChange={handleInputChange}
+                            />
+                        </FormControl>
 
-                    <FormControl id="lastname" isRequired mt={4}>
-                        <FormLabel>Last Name</FormLabel>
-                        <Input
-                            type="text"
-                            name="lastname"
-                            value={userFormData.lastname}
-                            onChange={handleInputChange}
-                        />
-                    </FormControl>
+                        <FormControl id="lastname" isRequired mt={4}>
+                            <FormLabel>Last Name</FormLabel>
+                            <Input
+                                type="text"
+                                name="lastname"
+                                value={userFormData.lastname}
+                                onChange={handleInputChange}
+                            />
+                        </FormControl>
 
-                    <FormControl id="email" isRequired mt={4}>
-                        <FormLabel>Email</FormLabel>
-                        <Input
-                            type="email"
-                            name="email"
-                            value={userFormData.email}
-                            onChange={handleInputChange}
-                        />
-                    </FormControl>
+                        <FormControl id="email" isRequired mt={4}>
+                            <FormLabel>Email</FormLabel>
+                            <Input
+                                type="email"
+                                name="email"
+                                value={userFormData.email}
+                                onChange={handleInputChange}
+                            />
+                        </FormControl>
 
-                    <FormControl id="password" isRequired mt={4}>
-                        <FormLabel>Password</FormLabel>
-                        <Input
-                            type="password"
-                            name="password"
-                            value={userFormData.password}
-                            onChange={handleInputChange}
-                        />
-                    </FormControl>
+                        <FormControl id="password" isRequired mt={4}>
+                            <FormLabel>Password</FormLabel>
+                            <Input
+                                type="password"
+                                name="password"
+                                value={userFormData.password}
+                                onChange={handleInputChange}
+                            />
+                        </FormControl>
 
-                    <Button
-                        type="submit"
-                        colorScheme="blue"
-                        mt={4}
-                        isDisabled={!userFormData.firstname || !userFormData.lastname || !userFormData.email || !userFormData.password}
-                    >
-                        Submit
-                    </Button>
-                </form>
+                        <Button
+                            type="submit"
+                            colorScheme="blue"
+                            mt={4}
+                            isDisabled={!userFormData.firstname || !userFormData.lastname || !userFormData.email || !userFormData.password}
+                        >
+                            Submit
+                        </Button>
+                    </form>
+                </Box>
             </Box>
         </Container>
     );
