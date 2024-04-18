@@ -44,7 +44,7 @@ export default function ShipmentCardHome({ shipmentDetails, mapImage }) {
           <Grid templateColumns=
             {{
               base: "repeat(1fr)",
-              md: "1fr 1.5fr 1.5fr",
+              md: "1fr 1.8fr 1.3fr",
             }}
             gap={4}
 
@@ -102,7 +102,7 @@ export default function ShipmentCardHome({ shipmentDetails, mapImage }) {
           </Grid>
         </CardHeader >
 
-        <Divider />
+        <Divider color='gray' />
 
         {/* The map on the left, and all the checkpoints on the right */}
         < CardBody >
