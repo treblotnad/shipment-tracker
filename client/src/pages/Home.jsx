@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Container } from "react-bootstrap";
 import Hero from "../components/Hero";
 import SearchTrackingHome from "../components/SearchTrackingHome";
 import ShipmentCardHome from "../components/ShipmentCardHome";
 import {
+  Container,
   Text,
   Alert,
   AlertIcon,
@@ -39,7 +39,9 @@ const Home = () => {
   };
 
   return (
-    <Container>
+
+
+    <>
       <Hero />
       <p></p>
 
@@ -67,11 +69,12 @@ const Home = () => {
       </VStack>
 
 
-      <Container>
+      <Box>
         {shipmentDetails && <ShipmentCardHome shipmentDetails={shipmentDetails} mapImage={mapImage} />}
-      </Container >
+      </Box >
 
-    </Container >
+
+    </>
   );
 };
 

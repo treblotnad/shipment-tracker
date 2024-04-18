@@ -56,7 +56,7 @@ export default function SearchTrackingHome({ onResults, onError, onInputClear })
         <FormControl onSubmit={handleSearch}>
             <InputGroup>
                 <Input
-                    h="2.5rem"
+                    h='2.5rem'
                     type="text"
                     // value={input}
                     placeholder="Enter a tracking number"
