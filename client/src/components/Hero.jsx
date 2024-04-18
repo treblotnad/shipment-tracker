@@ -1,3 +1,5 @@
+import SignupForm from './SignupForm'
+import { useState } from 'react'
 import {
     Container,
     Stack,
@@ -15,6 +17,12 @@ import {
 } from '@chakra-ui/react'
 
 export default function Hero() {
+
+    const [showSignupModal, setShowSignupModal] = useState(false);
+
+    const handleSignupModalOpen = () => setShowSignupModal(true);
+    const handleSignupModalClose = () => setShowSignupModal(false);
+
     return (
         <Container maxW={'7xl'}>
             <Stack
@@ -62,7 +70,9 @@ export default function Hero() {
                             px={6}
                             colorScheme={'red'}
                             bg={'red.400'}
-                            _hover={{ bg: 'red.500' }}>
+                            _hover={{ bg: 'red.500' }}
+                            onClick={handleSignupModalOpen}
+                        >
                             Sign Up
                         </Button>
 

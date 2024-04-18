@@ -1,5 +1,6 @@
 const { User, Shipment } = require("../models");
-const { signToken, AuthenticationError } = require("../utils/auth");
+const { AuthenticationError } = require('apollo-server-express');
+const { signToken } = require("../utils/auth");
 const { getId, getTracking } = require("../utils/axiosAPI");
 const axios = require("axios");
 require("dotenv").config();
@@ -73,7 +74,7 @@ const resolvers = {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw new AuthenticationError();
+        throw new AuthenticationError('Incorrect email or password');
       }
 
       const correctPw = await user.isCorrectPassword(password);
