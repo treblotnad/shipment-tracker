@@ -1,95 +1,97 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Navbar, Nav, Container, Modal, Tab } from "react-bootstrap";
-import SignUpForm from "./SignupForm";
-import LoginForm from "./LoginForm";
-import Auth from "../utils/auth";
-import NavLogo from "./Logo";
-import { Box, Text, Button } from "@chakra-ui/react";
-import { useQuery } from "@apollo/client";
-import { GET_ME } from "../utils/queries";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import LoginForm from './LoginForm';
+import Auth from '../utils/auth';
+import NavLogo from './Logo';
+import { useQuery } from '@apollo/client';
+import { GET_ME } from '../utils/queries';
+import {
+    Box,
+    Text,
+    Button,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalBody,
+    Flex,
+    Spacer,
+    IconButton,
+    useDisclosure,
+} from '@chakra-ui/react';
+import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 
 const AppNavbar = () => {
-    // set modal display state
     const [showModal, setShowModal] = useState(false);
-    // Gets the user's data
-    const { loading, data, error } = useQuery(GET_ME);
-    if (loading) {
-        return (
-            <>
-                <Box h="85px"></Box>
-            </>
-        );
-    }
-    console.log(data);
+    const { data, error } = useQuery(GET_ME);
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
         <>
-            <Navbar expand="lg">
-                <Container fluid>
-                    <NavLogo as={Link} to="/" w="200px"></NavLogo>
+            <Box as="nav" p={4}>
+                <Flex mx="2">
+                    <Link to="/" >
+                        <NavLogo w="200px" />
+                    </Link>
+                    <Spacer />
+                    {Auth.loggedIn() ? (
+                        <>
+                            <Flex alignItems="center" display={{ sm: 'none', md: 'block' }}>
+                                <Text as='i' px={5} mb={0} textColor="grey" fontSize="1rem">
+                                    Hello, {data?.me?.firstname}
+                                </Text>
+                                <Link to="/dashboard" style={{ marginRight: '20px' }}>Dashboard</Link>
+                                <Link to="/account" style={{ marginRight: '20px' }}>Account</Link>
+                                <Button fontSize='1rem' onClick={Auth.logout}>Logout</Button>
+                            </Flex>
+                            <IconButton
+                                size={'md'}
+                                icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+                                aria-label={'Open Menu'}
+                                display={{ md: 'none' }}
+                                mt={2}
+                                fontSize="1.1rem"
+                                color="gray.500"
+                                onClick={isOpen ? onClose : onOpen}
+                            />
+                        </>
+                    ) : (
+                        <Button fontSize='1rem' onClick={() => setShowModal(true)}>Login</Button>
+                    )}
+                </Flex>
+            </Box>
 
-                    <Navbar id="navbar" className="d-flex flex-row-reverse">
-                        <Nav className="d-flex">
-                            {Auth.loggedIn() ? (
-                                <>
-                                    <Text
-                                        px={2}
-                                        paddingRight="30px"
-                                        paddingTop="5px"
-                                        textColor="grey"
-                                        fontSize="19px"
-                                    >
-                                        Hello, {data?.me?.firstname}
-                                    </Text>
-                                    <Nav.Link as={Link} to="/dashboard">
-                                        Dashboard
-                                    </Nav.Link>
-                                    <Nav.Link as={Link} to="/account">
-                                        Account
-                                    </Nav.Link>
-                                    <Button onClick={Auth.logout}>Logout</Button>
-                                </>
-                            ) : (
-                                <Button onClick={() => setShowModal(true)}>Login</Button>
-                                // <Nav.Link onClick={() => setShowModal(true)}>Login/Sign Up</Nav.Link>
-                            )}
-                        </Nav>
-                    </Navbar>
-                </Container>
-            </Navbar>
-            {/* set modal data up */}
-            <Modal
-                size="lg"
-                show={showModal}
-                onHide={() => setShowModal(false)}
-                aria-labelledby="signup-modal"
+            {/* Responsive Menu */}
+            <Flex
+                w="100%"
+                h="100%"
+                display={{ base: isOpen ? 'flex' : 'none', md: 'none' }}
+                alignItems="flex-end"
+                flexDirection="column"
+                bgColor="white"
+                gap={1}
+                mt={-7}
+                pr={2}
             >
-                {/* tab container to do either signup or login component */}
-                <Tab.Container defaultActiveKey="login">
-                    {/* <Modal.Header closeButton>
-                        <Modal.Title id="signup-modal">
-                            <Nav variant="pills">
-                                <Nav.Item>
-                                    <Nav.Link eventKey="login">Login</Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link eventKey="signup">Sign Up</Nav.Link>
-                                </Nav.Item>
-                            </Nav>
-                        </Modal.Title>
-                    </Modal.Header> */}
-                    <Modal.Body>
-                        <Tab.Content>
-                            <Tab.Pane eventKey="login">
-                                <LoginForm handleModalClose={() => setShowModal(false)} />
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="signup">
-                                <SignUpForm handleModalClose={() => setShowModal(false)} />
-                            </Tab.Pane>
-                        </Tab.Content>
-                    </Modal.Body>
-                </Tab.Container>
+                {Auth.loggedIn() && (
+                    <>
+                        <Text px={5} mb={0} textColor="grey" fontSize="1rem">
+                            Hello, {data?.me?.firstname}
+                        </Text>
+                        <Link to="/dashboard" style={{ marginRight: '20px' }}>Dashboard</Link>
+                        <Link to="/account" style={{ marginRight: '20px' }}>Account</Link>
+                        <Button fontSize='1rem' style={{ marginRight: '15px' }} mt='3' onClick={Auth.logout}>Logout</Button>
+                    </>
+                )}
+            </Flex>
+
+            {/* Login modal */}
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)} size='xl'>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalBody>
+                        <LoginForm handleModalClose={() => setShowModal(false)} />
+                    </ModalBody>
+                </ModalContent>
             </Modal>
         </>
     );

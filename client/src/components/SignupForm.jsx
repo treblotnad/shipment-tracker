@@ -1,41 +1,33 @@
 import { useState } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import {
+    Box,
+    Button,
+    FormControl,
+    FormLabel,
+    FormErrorMessage,
+    Input,
+    Alert,
+    Stack,
+    Heading,
+    Container,
+} from '@chakra-ui/react';
 
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 
 const SignupForm = () => {
-    // set initial form state
-    const [userFormData, setUserFormData] = useState({ firstname: '', lastname: '', email: '', password: '' });
-    // set state for form validation
-    const [validated] = useState(false);
-    // set state for alert
     const [showAlert, setShowAlert] = useState(false);
-
     const [addUser] = useMutation(ADD_USER);
-
-    // Helper function to capitalized the first letter
-    const capFirstLetter = (string) => {
-        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-    }
+    const [userFormData, setUserFormData] = useState({ firstname: '', lastname: '', email: '', password: '' });
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        // check if input is either firstname or lastname and capitalize it
-        const newValue = (name === 'firstname' || name === 'lastname') ? capFirstLetter(value) : value;
-        setUserFormData({ ...userFormData, [name]: newValue });
+        setUserFormData({ ...userFormData, [name]: value });
     };
 
-    const handleFormSubmit = async (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-
-        // check if form has everything (as per react-bootstrap docs)
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
 
         try {
             const { data } = await addUser({
@@ -43,87 +35,83 @@ const SignupForm = () => {
             });
 
             Auth.login(data.addUser.token);
-        } catch (e) {
-            console.error(e);
-            showAlert(true);
+        } catch (error) {
+            console.error(error);
+            setShowAlert(true);
         }
 
-        setUserFormData({
-            firstname: '',
-            lastname: '',
-            email: '',
-            password: '',
-        });
+        setUserFormData({ firstname: '', lastname: '', email: '', password: '' });
     };
 
     return (
-        <>
-            {/* This is needed for the validation functionality above */}
-            <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
-                {/* show alert if server response is bad */}
-                <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
-                    Something went wrong with your signup!
-                </Alert>
+        <Container p='10'>
+            <Box>
+                <Stack spacing="6" textAlign="center">
+                    <Heading size="lg" bgGradient="linear(to-l, #7928CA, #FF0080)" bgClip="text" pb='10'>
+                        Sign Up for an account
+                    </Heading>
+                </Stack>
 
-                <Form.Group className='mb-3'>
-                    <Form.Label htmlFor='firstname'>First Name</Form.Label>
-                    <Form.Control
-                        type='text'
-                        placeholder='Your First Name'
-                        name='firstname'
-                        onChange={handleInputChange}
-                        value={userFormData.firstname}
-                        required
-                    />
-                    <Form.Control.Feedback type='invalid'>First name is required!</Form.Control.Feedback>
-                </Form.Group>
+                <Box py={{ base: '0', sm: '8' }} px={{ base: '4', sm: '10' }} bg="bg.surface" boxShadow="xl" borderRadius="xl">
+                    <form onSubmit={handleSubmit}>
+                        {showAlert && (
+                            <Alert status="error" mb={4}>
+                                Something went wrong with your signup!
+                            </Alert>
+                        )}
 
-                <Form.Group className='mb-3'>
-                    <Form.Label htmlFor='lastname'>Last Name</Form.Label>
-                    <Form.Control
-                        type='text'
-                        placeholder='Your Last Name'
-                        name='lastname'
-                        onChange={handleInputChange}
-                        value={userFormData.lastname}
-                        required
-                    />
-                    <Form.Control.Feedback type='invalid'>Last name is required!</Form.Control.Feedback>
-                </Form.Group>
+                        <FormControl id="firstname" isRequired>
+                            <FormLabel>First Name</FormLabel>
+                            <Input
+                                type="text"
+                                name="firstname"
+                                value={userFormData.firstname}
+                                onChange={handleInputChange}
+                            />
+                        </FormControl>
 
-                <Form.Group className='mb-3'>
-                    <Form.Label htmlFor='email'>Email</Form.Label>
-                    <Form.Control
-                        type='email'
-                        placeholder='Your email address'
-                        name='email'
-                        onChange={handleInputChange}
-                        value={userFormData.email}
-                        required
-                    />
-                    <Form.Control.Feedback type='invalid'>Email is required!</Form.Control.Feedback>
-                </Form.Group>
+                        <FormControl id="lastname" isRequired mt={4}>
+                            <FormLabel>Last Name</FormLabel>
+                            <Input
+                                type="text"
+                                name="lastname"
+                                value={userFormData.lastname}
+                                onChange={handleInputChange}
+                            />
+                        </FormControl>
 
-                <Form.Group className='mb-3'>
-                    <Form.Label htmlFor='password'>Password</Form.Label>
-                    <Form.Control
-                        type='password'
-                        placeholder='Your password'
-                        name='password'
-                        onChange={handleInputChange}
-                        value={userFormData.password}
-                        required
-                    />
-                    <Form.Control.Feedback type='invalid'>Password is required!</Form.Control.Feedback>
-                </Form.Group>
-                <Button
-                    disabled={!(userFormData.firstname && userFormData.lastname && userFormData.email && userFormData.password)}
-                    type='submit'
-                    variant='success'>
-                    Submit
-                </Button>
-            </Form>
-        </>
+                        <FormControl id="email" isRequired mt={4}>
+                            <FormLabel>Email</FormLabel>
+                            <Input
+                                type="email"
+                                name="email"
+                                value={userFormData.email}
+                                onChange={handleInputChange}
+                            />
+                        </FormControl>
+
+                        <FormControl id="password" isRequired mt={4}>
+                            <FormLabel>Password</FormLabel>
+                            <Input
+                                type="password"
+                                name="password"
+                                value={userFormData.password}
+                                onChange={handleInputChange}
+                            />
+                        </FormControl>
+
+                        <Button
+                            type="submit"
+                            colorScheme="blue"
+                            mt={4}
+                            isDisabled={!userFormData.firstname || !userFormData.lastname || !userFormData.email || !userFormData.password}
+                        >
+                            Submit
+                        </Button>
+                    </form>
+                </Box>
+            </Box>
+        </Container>
     );
 };
 
