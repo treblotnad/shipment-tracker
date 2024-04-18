@@ -99,11 +99,11 @@ export default function Hero() {
                     </Box>
                 </Flex>
             </Stack>
+
+            {/* Signup modal */}
             <Modal isOpen={showSignupModal} onClose={handleSignupModalClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Sign Up</ModalHeader>
-                    <ModalCloseButton />
                     <ModalBody>
                         <SignupForm />
                     </ModalBody>

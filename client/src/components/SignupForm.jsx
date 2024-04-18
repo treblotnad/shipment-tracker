@@ -7,6 +7,9 @@ import {
     FormErrorMessage,
     Input,
     Alert,
+    Stack,
+    Heading,
+    Container,
 } from '@chakra-ui/react';
 
 import { useMutation } from '@apollo/client';
@@ -41,64 +44,72 @@ const SignupForm = () => {
     };
 
     return (
-        <Box>
-            <form onSubmit={handleSubmit}>
-                {showAlert && (
-                    <Alert status="error" mb={4}>
-                        Something went wrong with your signup!
-                    </Alert>
-                )}
+        <Container p='10'>
+            <Box>
+                <Stack spacing="6" textAlign="center">
+                    <Heading size="lg" bgGradient="linear(to-l, #7928CA, #FF0080)" bgClip="text" pb='10'>
+                        Sign Up
+                    </Heading>
+                </Stack>
 
-                <FormControl id="firstname" isRequired>
-                    <FormLabel>First Name</FormLabel>
-                    <Input
-                        type="text"
-                        name="firstname"
-                        value={userFormData.firstname}
-                        onChange={handleInputChange}
-                    />
-                </FormControl>
+                <form onSubmit={handleSubmit}>
+                    {showAlert && (
+                        <Alert status="error" mb={4}>
+                            Something went wrong with your signup!
+                        </Alert>
+                    )}
 
-                <FormControl id="lastname" isRequired mt={4}>
-                    <FormLabel>Last Name</FormLabel>
-                    <Input
-                        type="text"
-                        name="lastname"
-                        value={userFormData.lastname}
-                        onChange={handleInputChange}
-                    />
-                </FormControl>
+                    <FormControl id="firstname" isRequired>
+                        <FormLabel>First Name</FormLabel>
+                        <Input
+                            type="text"
+                            name="firstname"
+                            value={userFormData.firstname}
+                            onChange={handleInputChange}
+                        />
+                    </FormControl>
 
-                <FormControl id="email" isRequired mt={4}>
-                    <FormLabel>Email</FormLabel>
-                    <Input
-                        type="email"
-                        name="email"
-                        value={userFormData.email}
-                        onChange={handleInputChange}
-                    />
-                </FormControl>
+                    <FormControl id="lastname" isRequired mt={4}>
+                        <FormLabel>Last Name</FormLabel>
+                        <Input
+                            type="text"
+                            name="lastname"
+                            value={userFormData.lastname}
+                            onChange={handleInputChange}
+                        />
+                    </FormControl>
 
-                <FormControl id="password" isRequired mt={4}>
-                    <FormLabel>Password</FormLabel>
-                    <Input
-                        type="password"
-                        name="password"
-                        value={userFormData.password}
-                        onChange={handleInputChange}
-                    />
-                </FormControl>
+                    <FormControl id="email" isRequired mt={4}>
+                        <FormLabel>Email</FormLabel>
+                        <Input
+                            type="email"
+                            name="email"
+                            value={userFormData.email}
+                            onChange={handleInputChange}
+                        />
+                    </FormControl>
 
-                <Button
-                    type="submit"
-                    colorScheme="blue"
-                    mt={4}
-                    isDisabled={!userFormData.firstname || !userFormData.lastname || !userFormData.email || !userFormData.password}
-                >
-                    Submit
-                </Button>
-            </form>
-        </Box>
+                    <FormControl id="password" isRequired mt={4}>
+                        <FormLabel>Password</FormLabel>
+                        <Input
+                            type="password"
+                            name="password"
+                            value={userFormData.password}
+                            onChange={handleInputChange}
+                        />
+                    </FormControl>
+
+                    <Button
+                        type="submit"
+                        colorScheme="blue"
+                        mt={4}
+                        isDisabled={!userFormData.firstname || !userFormData.lastname || !userFormData.email || !userFormData.password}
+                    >
+                        Submit
+                    </Button>
+                </form>
+            </Box>
+        </Container>
     );
 };
 

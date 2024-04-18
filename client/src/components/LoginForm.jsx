@@ -20,7 +20,6 @@ import Auth from '../utils/auth';
 
 const LoginForm = () => {
     const [userFormData, setUserFormData] = useState({ email: '', password: '' });
-    // const navigate = useNavigate();
     const [showAlert, setShowAlert] = useState(false);
     const [login, { error }] = useMutation(LOGIN_USER);
 
@@ -43,24 +42,19 @@ const LoginForm = () => {
                 Auth.login(data.login.token);
             }
 
-            // Auth.login(data.login.token);
         } catch (e) {
             // console.error(e);
             setShowAlert(true);
         }
     };
 
-
     return (
-        <Container maxW="lg" py={{ base: '12', md: '24' }} px={{ base: '0', sm: '8' }} >
+        <Container maxW="lg" py={{ base: '10', md: '16' }} px={{ base: '0', sm: '8' }} >
             <Stack spacing="8">
                 <Stack spacing="6" textAlign="center">
                     <Heading size="lg" bgGradient="linear(to-l, #7928CA, #FF0080)" bgClip="text">
                         Log in to your account
                     </Heading>
-                    <Text>
-                        Don't have an account? <Link color="teal.500" href="#">Sign up</Link>
-                    </Text>
                 </Stack>
 
                 <Box py={{ base: '0', sm: '8' }} px={{ base: '4', sm: '10' }} bg="bg.surface" boxShadow="xl" borderRadius="xl">
