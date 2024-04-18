@@ -3,6 +3,9 @@ import { REMOVE_SHIPMENT } from "../utils/mutations";
 import Auth from "../utils/auth";
 import { dateToWeekDate, dateToShortDate } from "../utils/datetime";
 import Status from "./Status";
+import axios from "axios";
+import { useState } from "react";
+const BASE_URL = "http://localhost:3001";
 
 import {
   Box,
@@ -12,14 +15,10 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  Accordion,
   Grid,
   GridItem,
   Center,
   Image,
-  SimpleGrid,
-  Flex,
-  Spacer,
 } from "@chakra-ui/react";
 const logo = {
   ups: "/images/ups.png",
@@ -28,16 +27,12 @@ const logo = {
 };
 import { ArrowRightIcon } from "@chakra-ui/icons";
 
-export default function ShipmentCard({
-  shipmentId,
-  tracking_number,
-  slug,
-  props,
-}) {
+export default function ShipmentCard({ shipmentId, props }) {
   const [removeShipment] = useMutation(REMOVE_SHIPMENT, {
     refetchQueries: ["me"],
   });
-//   console.log(props);
+  const [mapImage, setMapImage] = useState("");
+  //   console.log(props);
   const handleRemoveShipment = async () => {
     if (!Auth.loggedIn()) {
       console.error("Not logged in");
@@ -67,9 +62,32 @@ export default function ShipmentCard({
   }
   const eta = etaDefine();
 
+  async function getImage(e) {
+    e.preventDefault;
+    try {
+      const datetime = new Date();
+      const response = await axios.post(BASE_URL + `/api/trackshipment`, {
+        tracking: props.tracking_number,
+        carrier: props.slug,
+        datetime,
+      });
+      const shipmentData = response.data.shipmentDetails;
+      setMapImage(response?.data?.image);
+
+      if (!shipmentData || shipmentData.trackings.tag === "Pending") {
+        console.log("No shipment found or the shipment is currently pending.");
+      } else {
+        // console.log("mapImage");
+      }
+    } catch (error) {
+      console.error("Failed to fetch tracking details:", error);
+      console.error("Failed to fetch tracking details");
+    }
+  }
+
   return (
     <AccordionItem>
-      <AccordionButton>
+      <AccordionButton onClick={getImage}>
         <Grid templateColumns="100px 1.5fr 3fr 1fr 150px" gap={3}>
           {/* Logo based on the carrier, with image sources in the const above */}
           <GridItem>
@@ -116,7 +134,7 @@ export default function ShipmentCard({
       <AccordionPanel>
         <Grid templateColumns="1fr 2fr" gap={4}>
           <GridItem>
-            <Image src="images/map.jpg" alt="Map" />
+            <Image src={mapImage} alt="Shipment Map" />
             <Text color="gray" fontSize="sm" mt={2}>
               <strong>{props.trackings.shipment_type || ""}</strong> • Shipped
               on {dateToWeekDate(props.trackings.shipment_pickup_date)}
