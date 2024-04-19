@@ -7,7 +7,7 @@ import Auth from "../utils/auth";
 import { removeShipmentId } from "../utils/localStorage";
 // import { matchCarrier } from "../utils/carrierValidate";
 import SearchTracking from "../components/SearchTracking";
-import PaginationObj from "../components/pagination";
+import PaginationObj from "../components/Pagination";
 
 import { Box, Text, SimpleGrid, Skeleton } from "@chakra-ui/react";
 
