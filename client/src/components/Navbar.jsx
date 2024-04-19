@@ -35,7 +35,7 @@ const AppNavbar = () => {
                     <Spacer />
                     {Auth.loggedIn() ? (
                         <>
-                            <Flex alignItems="center" display={{ sm: 'none', md: 'block' }}>
+                            <Flex alignItems="center" display={{ base: 'none', md: 'block' }}>
                                 <Text as='i' px={5} mb={0} textColor="grey" fontSize="1rem">
                                     Hello, {data?.me?.firstname}
                                 </Text>
@@ -47,7 +47,7 @@ const AppNavbar = () => {
                                 size={'md'}
                                 icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
                                 aria-label={'Open Menu'}
-                                display={{ md: 'none' }}
+                                display={{ base: 'block', md: 'none' }}
                                 mt={2}
                                 fontSize="1.1rem"
                                 color="gray.500"
@@ -85,7 +85,7 @@ const AppNavbar = () => {
             </Flex>
 
             {/* Login modal */}
-            <Modal isOpen={showModal} onClose={() => setShowModal(false)} size='xl'>
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)} size={{ base: "md", md: "xl" }}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalBody>
