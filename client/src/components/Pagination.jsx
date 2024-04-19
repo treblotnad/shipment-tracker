@@ -20,7 +20,6 @@ import {
   PaginationSeparator,
 } from "@ajna/pagination";
 import { useState, useEffect } from "react";
-import { dateToWeekDate, dateToShortDate } from "../utils/datetime";
 import ShipmentCard from "./ShipmentCard";
 import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 
@@ -109,6 +108,7 @@ function PaginationObj({ props, dbProps }) {
     const pagePackages = pageSlice(packagesSorted, pageSize, offset);
     setPackages(pagePackages);
     setPackagesTotal(packagesSorted.length);
+    
   }, [
     currentPage,
     pageSize,
@@ -120,7 +120,7 @@ function PaginationObj({ props, dbProps }) {
     pages,
     checkedItems,
   ]);
-
+  
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);
   };
@@ -131,14 +131,12 @@ function PaginationObj({ props, dbProps }) {
   const handleSortChange = (event) => {
     setSort(event.target.value);
   };
+  
   return (
     <ChakraProvider>
-
-
       <Stack spacing={5}>
         <SimpleGrid columns={{ sm: 1, md: 1, lg: 1 }}>
-
-          <Accordion allowToggle>
+          <Accordion allowToggle defaultIndex={-1}>
             {packages.map((shipment) => (
               <ShipmentCard
                 shipmentId={shipment.mongoId}
@@ -146,11 +144,11 @@ function PaginationObj({ props, dbProps }) {
                 tracking_number={shipment.tracking_number}
                 slug={shipment.slug}
                 props={shipment}
+                
               />
             ))}
           </Accordion>
         </SimpleGrid>
-
 
         {/* Combine sorting and pagination into one row */}
         <Flex justifyContent="space-between" alignItems="center" w="full" p={2}>
@@ -192,11 +190,31 @@ function PaginationObj({ props, dbProps }) {
             currentPage={currentPage}
             onPageChange={handlePageChange}
           >
-            <PaginationContainer align="center" justify="flex-end" p={0} w="auto">
-              <PaginationPrevious _hover={{ bg: "gray.400" }} mr={-4} mt={-4} h={8}>
+            <PaginationContainer
+              align="center"
+              justify="flex-end"
+              p={0}
+              w="auto"
+            >
+              <PaginationPrevious
+                _hover={{ bg: "gray.400" }}
+                mr={-4}
+                mt={-4}
+                h={8}
+              >
                 <ArrowBackIcon />
               </PaginationPrevious>
-              <PaginationPageGroup align="center" separator={<PaginationSeparator bg="blue.300" fontSize="sm" w={7} jumpSize={11} />}>
+              <PaginationPageGroup
+                align="center"
+                separator={
+                  <PaginationSeparator
+                    bg="blue.300"
+                    fontSize="sm"
+                    w={7}
+                    jumpSize={11}
+                  />
+                }
+              >
                 {pages.map((page) => (
                   <PaginationPage
                     w={7}
@@ -210,12 +228,16 @@ function PaginationObj({ props, dbProps }) {
                   />
                 ))}
               </PaginationPageGroup>
-              <PaginationNext _hover={{ bg: "gray.400" }} ml="1rem" mt={-4} h={8}>
+              <PaginationNext
+                _hover={{ bg: "gray.400" }}
+                ml="1rem"
+                mt={-4}
+                h={8}
+              >
                 <ArrowForwardIcon />
               </PaginationNext>
             </PaginationContainer>
           </Pagination>
-
         </Flex>
       </Stack>
     </ChakraProvider>
