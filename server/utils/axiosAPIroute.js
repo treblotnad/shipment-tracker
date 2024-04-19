@@ -40,15 +40,19 @@ router.post("/trackshipment", async (req, res) => {
     const geocodePromises = shipmentDetails.trackings.checkpoints.map(
       (checkpoint) => {
         if (checkpoint.location !== "") {
+          // console.log(checkpoint.location);
+
           return geocoder.geocode(checkpoint.location);
         }
         return Promise.resolve([]); // if location is empty, return empty array
       }
     );
-
     const geocodedResults = await Promise.all(geocodePromises);
     geocodedResults.forEach((data) => {
-      if (data.length > 0 && data[0].extra.confidence > 5) {
+      // console.log(geocodedResults);
+      // console.log(data[0]);
+
+      if (data.length > 0 && data[0].extra.confidence > 1) {
         const { latitude, longitude } = data[0];
         coords.push([longitude, latitude]); // Add the geocoded coordinates to the map polyline
         map.addMarker({
@@ -58,20 +62,22 @@ router.post("/trackshipment", async (req, res) => {
           height: 48,
         });
       }
-      if (coords.length > 1) {
-        // Only add a line if there are at least two points
-        const line = {
-          coords: coords,
-          color: "#0000FFBB",
-          width: 3,
-        };
-        map.addLine(line); // Add the polyline to the map
-      }
+
       // } else {
       //   console.error('Geocode data missing or incomplete for checkpoint', data);
       // }
     });
-
+    if (coords.length > 1) {
+      // Only add a line if there are at least two points
+      // console.log(coords);
+      const line = {
+        coords: coords,
+        color: "#0000FFBB",
+        width: 3,
+      };
+      map.addLine(line); // Add the polyline to the map
+    }
+    // console.log(coords);
     // Render the map after all markers have been added
     await map.render();
 
