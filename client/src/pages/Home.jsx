@@ -69,7 +69,7 @@ const Home = () => {
       </VStack>
 
 
-      <Box>
+      <Box pb={10}>
         {shipmentDetails && <ShipmentCardHome shipmentDetails={shipmentDetails} mapImage={mapImage} />}
       </Box >
 
