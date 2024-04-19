@@ -9,16 +9,12 @@ import { useState } from "react";
 import { BASE_URL } from "../../../config";
 
 import {
-  Card,
-  CardHeader,
-  CardBody,
   Text,
   Image,
   Grid,
   GridItem,
   Box,
   Center,
-  Divider,
   Flex,
   HStack,
   VStack,
@@ -26,8 +22,6 @@ import {
   AccordionItem,
   AccordionButton,
   AccordionPanel,
-  AccordionIcon,
-  Button,
   IconButton,
   Skeleton,
 } from "@chakra-ui/react";
@@ -80,7 +74,7 @@ export default function ShipmentCard({ shipmentId, props }) {
   const eta = etaDefine();
 
   const isNarrowScreen = useBreakpointValue({ base: true, md: false });
-
+  
   async function getImage(e) {
     e.preventDefault;
     try {
@@ -107,7 +101,7 @@ export default function ShipmentCard({ shipmentId, props }) {
 
   return (
     <>
-      <AccordionItem>
+      <AccordionItem >
         <AccordionButton onClick={getImage}>
           <Flex
             justifyContent={{ base: "center", md: "space-between" }}
@@ -248,7 +242,11 @@ export default function ShipmentCard({ shipmentId, props }) {
             gap={4}
           >
             <GridItem>
-              <Image src={mapImage} alt="Shipment Map" />
+              {loading ? (
+                <Skeleton height="220px"></Skeleton>
+              ) : (
+                <Image src={mapImage} alt="Shipment Map" />
+              )}
               <Text color="gray" fontSize="sm" mt={2}>
                 <strong>{props.trackings.shipment_type || ""}</strong> • Shipped
                 on {dateToWeekDate(props.trackings.shipment_pickup_date)}
