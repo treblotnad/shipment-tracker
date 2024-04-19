@@ -2,7 +2,9 @@ import { useState } from "react";
 // import { Form } from 'react-bootstrap';
 import axios from "axios";
 import { matchCarrier } from "../utils/carrierValidate";
-const BASE_URL = "http://localhost:3001";
+// const BASE_URL = "http://localhost:3001";
+import { BASE_URL } from "../../../config";
+
 import {
   FormControl,
   Input,
