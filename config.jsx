@@ -1,7 +1,5 @@
 const BASE_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://webserver.com"
-    : "http://localhost:3001";
+  process.env.NODE_ENV === "production" ? "" : "http://localhost:3001";
 
 const Config = async () => {
   return <></>;
