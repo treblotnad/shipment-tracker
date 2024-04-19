@@ -5,7 +5,8 @@ import { dateToWeekDate, dateToShortDate } from "../utils/datetime";
 import Status from "./Status";
 import axios from "axios";
 import { useState } from "react";
-const BASE_URL = "http://localhost:3001";
+// const BASE_URL = "http://localhost:3001";
+import { BASE_URL } from "../../../config";
 
 import {
   Card,
@@ -26,8 +27,11 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+
   Button,
   IconButton,
+  Skeleton
+
 } from "@chakra-ui/react";
 
 import { ArrowRightIcon, DeleteIcon } from "@chakra-ui/icons";
@@ -45,6 +49,7 @@ export default function ShipmentCard({ shipmentId, props }) {
     refetchQueries: ["me"],
   });
   const [mapImage, setMapImage] = useState("");
+  const [loading, setLoading] = useState(true);
   //   console.log(props);
   const handleRemoveShipment = async () => {
     if (!Auth.loggedIn()) {
@@ -81,11 +86,11 @@ export default function ShipmentCard({ shipmentId, props }) {
   async function getImage(e) {
     e.preventDefault;
     try {
-      const datetime = new Date();
       const response = await axios.post(BASE_URL + `/api/trackshipment`, {
         tracking: props.tracking_number,
         carrier: props.slug,
-        datetime,
+        props,
+        isDashboard: true,
       });
       const shipmentData = response.data.shipmentDetails;
       setMapImage(response?.data?.image);
@@ -94,6 +99,7 @@ export default function ShipmentCard({ shipmentId, props }) {
         console.log("No shipment found or the shipment is currently pending.");
       } else {
         // console.log("mapImage");
+        setLoading(false);
       }
     } catch (error) {
       console.error("Failed to fetch tracking details:", error);
@@ -159,6 +165,7 @@ export default function ShipmentCard({ shipmentId, props }) {
                         {props.trackings.address.ship_from.city},{" "}
                         {props.trackings.address.ship_from.state}{" "}
                         <ArrowRightIcon boxSize={5} mx={12} color='green' mt='auto' />
+
                       </Text>
                       <Text fontWeight="bold" fontSize='auto'>
                         {props.trackings.address.ship_to.city},{" "}

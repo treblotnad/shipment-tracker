@@ -134,8 +134,10 @@ function PaginationObj({ props, dbProps }) {
   return (
     <ChakraProvider>
 
+
       <Stack spacing={5}>
         <SimpleGrid columns={{ sm: 1, md: 1, lg: 1 }}>
+
           <Accordion allowToggle>
             {packages.map((shipment) => (
               <ShipmentCard
@@ -148,6 +150,7 @@ function PaginationObj({ props, dbProps }) {
             ))}
           </Accordion>
         </SimpleGrid>
+
 
         {/* Combine sorting and pagination into one row */}
         <Flex justifyContent="space-between" alignItems="center" w="full" p={2}>
@@ -212,6 +215,7 @@ function PaginationObj({ props, dbProps }) {
               </PaginationNext>
             </PaginationContainer>
           </Pagination>
+
         </Flex>
       </Stack>
     </ChakraProvider>
