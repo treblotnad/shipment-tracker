@@ -5,7 +5,8 @@ import { dateToWeekDate, dateToShortDate } from "../utils/datetime";
 import Status from "./Status";
 import axios from "axios";
 import { useState } from "react";
-const BASE_URL = "http://localhost:3001";
+// const BASE_URL = "http://localhost:3001";
+import { BASE_URL } from "../../../config";
 
 import {
   Box,
