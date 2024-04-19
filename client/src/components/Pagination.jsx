@@ -21,7 +21,7 @@ import {
 } from "@ajna/pagination";
 import { useState, useEffect } from "react";
 import { dateToWeekDate, dateToShortDate } from "../utils/datetime";
-import ShipmentCard from "./shipmentCard";
+import ShipmentCard from "./ShipmentCard";
 import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 
 function pageSlice(array, pageSize, offset) {
