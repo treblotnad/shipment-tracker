@@ -22,10 +22,17 @@ const mapOptions = {
 
 router.post("/trackshipment", async (req, res) => {
   const map = new StaticMaps(mapOptions);
-  const { tracking, carrier, datetime } = req.body;
+  const { tracking, carrier, props, isDashboard } = req.body;
   try {
-    const hiveId = await getId(tracking, carrier);
-    const shipmentDetails = await getTracking(hiveId);
+    let hiveId = "";
+    let shipmentDetails = "";
+    if (!isDashboard) {
+      hiveId = await getId(tracking, carrier);
+      shipmentDetails = await getTracking(hiveId);
+    }
+    if (isDashboard) {
+      shipmentDetails = props;
+    }
 
     const coords = []; // array to store all the geocoded coordinates for the map polyline
 
@@ -68,7 +75,7 @@ router.post("/trackshipment", async (req, res) => {
     // Render the map after all markers have been added
     await map.render();
 
-    let buffer = await map.image.buffer(`image${datetime}/png`, {
+    let buffer = await map.image.buffer(`image/png`, {
       quality: 90,
     });
     const base64Image = `data:image/png;base64,${buffer.toString("base64")}`;
@@ -82,4 +89,5 @@ router.post("/trackshipment", async (req, res) => {
     });
   }
 });
+
 module.exports = router;

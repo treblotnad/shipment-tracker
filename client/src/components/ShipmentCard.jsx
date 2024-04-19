@@ -19,6 +19,7 @@ import {
   GridItem,
   Center,
   Image,
+  Skeleton,
 } from "@chakra-ui/react";
 const logo = {
   ups: "/images/ups.png",
@@ -32,6 +33,7 @@ export default function ShipmentCard({ shipmentId, props }) {
     refetchQueries: ["me"],
   });
   const [mapImage, setMapImage] = useState("");
+  const [loading, setLoading] = useState(true);
   //   console.log(props);
   const handleRemoveShipment = async () => {
     if (!Auth.loggedIn()) {
@@ -65,11 +67,11 @@ export default function ShipmentCard({ shipmentId, props }) {
   async function getImage(e) {
     e.preventDefault;
     try {
-      const datetime = new Date();
       const response = await axios.post(BASE_URL + `/api/trackshipment`, {
         tracking: props.tracking_number,
         carrier: props.slug,
-        datetime,
+        props,
+        isDashboard: true,
       });
       const shipmentData = response.data.shipmentDetails;
       setMapImage(response?.data?.image);
@@ -78,6 +80,7 @@ export default function ShipmentCard({ shipmentId, props }) {
         console.log("No shipment found or the shipment is currently pending.");
       } else {
         // console.log("mapImage");
+        setLoading(false);
       }
     } catch (error) {
       console.error("Failed to fetch tracking details:", error);
@@ -134,7 +137,11 @@ export default function ShipmentCard({ shipmentId, props }) {
       <AccordionPanel>
         <Grid templateColumns="1fr 2fr" gap={4}>
           <GridItem>
-            <Image src={mapImage} alt="Shipment Map" />
+            {loading ? (
+              <Skeleton height="220px"></Skeleton>
+            ) : (
+              <Image src={mapImage} alt="Shipment Map" />
+            )}
             <Text color="gray" fontSize="sm" mt={2}>
               <strong>{props.trackings.shipment_type || ""}</strong> • Shipped
               on {dateToWeekDate(props.trackings.shipment_pickup_date)}
