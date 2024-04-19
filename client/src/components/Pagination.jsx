@@ -21,7 +21,7 @@ import {
 } from "@ajna/pagination";
 import { useState, useEffect } from "react";
 import { dateToWeekDate, dateToShortDate } from "../utils/datetime";
-import ShipmentCard from "./shipmentCard";
+import ShipmentCard from "./ShipmentCard";
 import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 
 function pageSlice(array, pageSize, offset) {
@@ -133,7 +133,6 @@ function PaginationObj({ props, dbProps }) {
   };
   return (
     <ChakraProvider>
-      
       <Stack>
         <SimpleGrid columns={{ sm: 1, md: 1, lg: 1 }} spacing={5}>
           <Accordion allowToggle>
@@ -207,34 +206,34 @@ function PaginationObj({ props, dbProps }) {
           </PaginationContainer>
         </Pagination>
         <Flex justifyContent="end">
-        <Select mr={2} onChange={handlePageSizeChange} w={20}>
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-        </Select>
-        <Select ml={2} w={120} onChange={handleSortChange}>
-          <option value="ETA-Desc">ETA-Desc</option>
-          <option value="ETA-Asc">ETA-Asc</option>
-        </Select>
-        <Stack ml={3}>
-          <Checkbox
-            isChecked={checkedItems[0]}
-            onChange={(e) =>
-              setCheckedItems([e.target.checked, checkedItems[1]])
-            }
-          >
-            Delivered
-          </Checkbox>
-          <Checkbox
-            isChecked={checkedItems[1]}
-            onChange={(e) =>
-              setCheckedItems([checkedItems[0], e.target.checked])
-            }
-          >
-            In Transit
-          </Checkbox>
-        </Stack>
-      </Flex>
+          <Select mr={2} onChange={handlePageSizeChange} w={20}>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+          </Select>
+          <Select ml={2} w={120} onChange={handleSortChange}>
+            <option value="ETA-Desc">ETA-Desc</option>
+            <option value="ETA-Asc">ETA-Asc</option>
+          </Select>
+          <Stack ml={3}>
+            <Checkbox
+              isChecked={checkedItems[0]}
+              onChange={(e) =>
+                setCheckedItems([e.target.checked, checkedItems[1]])
+              }
+            >
+              Delivered
+            </Checkbox>
+            <Checkbox
+              isChecked={checkedItems[1]}
+              onChange={(e) =>
+                setCheckedItems([checkedItems[0], e.target.checked])
+              }
+            >
+              In Transit
+            </Checkbox>
+          </Stack>
+        </Flex>
       </Stack>
     </ChakraProvider>
   );
