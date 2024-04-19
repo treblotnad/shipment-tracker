@@ -101,7 +101,7 @@ export default function Hero() {
             </Stack>
 
             {/* Signup modal */}
-            <Modal isOpen={showSignupModal} onClose={handleSignupModalClose} size='xl'>
+            <Modal isOpen={showSignupModal} onClose={handleSignupModalClose} size={{ base: "md", md: "xl" }}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalBody>

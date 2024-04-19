@@ -44,16 +44,16 @@ export default function SearchTracking({ onSaveShipment }) {
 
   return (
     <FormControl maxW="800px" isInvalid={isError} onSubmit={handleSaveShipment}>
-      <InputGroup>
+      <InputGroup mb={8}>
         <Input
-          h="2.5rem"
+          h="3rem"
           type="text"
           value={input}
           placeholder="Enter a tracking number"
           onChange={handleInputChange}
         />
         <InputRightElement width="5rem">
-          <Button h="2rem" size="md" type="submit" onClick={handleSaveShipment}>
+          <Button h="2rem" colorScheme='blue' size="md" mt='2' type="submit" onClick={handleSaveShipment}>
             Add
           </Button>
         </InputRightElement>
@@ -61,7 +61,7 @@ export default function SearchTracking({ onSaveShipment }) {
       {isError ? (
         <FormErrorMessage>{errorMessage}</FormErrorMessage>
       ) : (
-        <FormHelperText>Enter a tracking number.</FormHelperText>
+        <FormHelperText></FormHelperText>
       )}
     </FormControl>
   );

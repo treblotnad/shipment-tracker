@@ -48,7 +48,7 @@ const SignupForm = () => {
             <Box>
                 <Stack spacing="6" textAlign="center">
                     <Heading size="lg" bgGradient="linear(to-l, #7928CA, #FF0080)" bgClip="text" pb='10'>
-                        Sign Up for an account
+                        Sign up for an account
                     </Heading>
                 </Stack>
 

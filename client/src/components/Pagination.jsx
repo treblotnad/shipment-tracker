@@ -133,9 +133,9 @@ function PaginationObj({ props, dbProps }) {
   };
   return (
     <ChakraProvider>
-      
-      <Stack>
-        <SimpleGrid columns={{ sm: 1, md: 1, lg: 1 }} spacing={5}>
+
+      <Stack spacing={5}>
+        <SimpleGrid columns={{ sm: 1, md: 1, lg: 1 }}>
           <Accordion allowToggle>
             {packages.map((shipment) => (
               <ShipmentCard
@@ -144,97 +144,75 @@ function PaginationObj({ props, dbProps }) {
                 tracking_number={shipment.tracking_number}
                 slug={shipment.slug}
                 props={shipment}
-              >
-                test
-              </ShipmentCard>
+              />
             ))}
           </Accordion>
         </SimpleGrid>
 
-        <Pagination
-          pagesCount={pagesCount}
-          currentPage={currentPage}
-          onPageChange={handlePageChange}
-        >
-          <PaginationContainer align="start" justify="flex-end" p={2} w="full">
-            <PaginationPrevious
-              _hover={{ bg: "gray.400" }}
-              onClick={() => console.log("Previous Page")}
-            >
-              <ArrowBackIcon></ArrowBackIcon>
-            </PaginationPrevious>
-            <PaginationPageGroup
-              isInline
-              align="center"
-              separator={
-                <PaginationSeparator
-                  onClick={() => console.log("Separator component")}
-                  bg="blue.300"
-                  fontSize="sm"
-                  w={7}
-                  jumpSize={11}
-                />
-              }
-            >
-              {pages.map((page) => (
-                <PaginationPage
-                  w={7}
-                  bg="red.300"
-                  key={`pagination_page_${page}`}
-                  page={page}
-                  onClick={() => console.log("Page Selected")}
-                  fontSize="sm"
-                  _hover={{
-                    bg: "green.300",
-                  }}
-                  _current={{
-                    bg: "green.300",
-                    fontSize: "sm",
-                    w: 7,
-                  }}
-                />
-              ))}
-            </PaginationPageGroup>
-            <PaginationNext
-              _hover={{
-                bg: "gray.400",
-              }}
-              ml="2rem"
-              onClick={() => console.log("Next Page")}
-            >
-              <ArrowForwardIcon></ArrowForwardIcon>
-            </PaginationNext>
-          </PaginationContainer>
-        </Pagination>
-        <Flex justifyContent="end">
-        <Select mr={2} onChange={handlePageSizeChange} w={20}>
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-        </Select>
-        <Select ml={2} w={120} onChange={handleSortChange}>
-          <option value="ETA-Desc">ETA-Desc</option>
-          <option value="ETA-Asc">ETA-Asc</option>
-        </Select>
-        <Stack ml={3}>
-          <Checkbox
-            isChecked={checkedItems[0]}
-            onChange={(e) =>
-              setCheckedItems([e.target.checked, checkedItems[1]])
-            }
+        {/* Combine sorting and pagination into one row */}
+        <Flex justifyContent="space-between" alignItems="center" w="full" p={2}>
+          {/* Left-side - Sorting and results count */}
+          <Flex alignItems="center">
+            <Select onChange={handlePageSizeChange} w={150} h={8} mr={4}>
+              <option value="5">5 per page</option>
+              <option value="10">10 per page</option>
+              <option value="20">20 per page</option>
+            </Select>
+            <Select onChange={handleSortChange} w={180} h={8}>
+              <option value="ETA-Desc">Sort by Recent</option>
+              <option value="ETA-Asc">Sort by Oldest</option>
+            </Select>
+            <Stack spacing={1} direction="row" ml={3}>
+              <Checkbox
+                isChecked={checkedItems[0]}
+                mx={4}
+                onChange={(e) =>
+                  setCheckedItems([e.target.checked, checkedItems[1]])
+                }
+              >
+                Delivered
+              </Checkbox>
+              <Checkbox
+                isChecked={checkedItems[1]}
+                onChange={(e) =>
+                  setCheckedItems([checkedItems[0], e.target.checked])
+                }
+              >
+                In Transit
+              </Checkbox>
+            </Stack>
+          </Flex>
+
+          {/* Right-side - Pagination controls */}
+          <Pagination
+            pagesCount={pagesCount}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
           >
-            Delivered
-          </Checkbox>
-          <Checkbox
-            isChecked={checkedItems[1]}
-            onChange={(e) =>
-              setCheckedItems([checkedItems[0], e.target.checked])
-            }
-          >
-            In Transit
-          </Checkbox>
-        </Stack>
-      </Flex>
+            <PaginationContainer align="center" justify="flex-end" p={0} w="auto">
+              <PaginationPrevious _hover={{ bg: "gray.400" }} mr={-4} mt={-4} h={8}>
+                <ArrowBackIcon />
+              </PaginationPrevious>
+              <PaginationPageGroup align="center" separator={<PaginationSeparator bg="blue.300" fontSize="sm" w={7} jumpSize={11} />}>
+                {pages.map((page) => (
+                  <PaginationPage
+                    w={7}
+                    bg="gray.100"
+                    h={7}
+                    key={`pagination_page_${page}`}
+                    page={page}
+                    fontSize="sm"
+                    _hover={{ bg: "green.300" }}
+                    _current={{ bg: "green.300", fontSize: "sm", w: 7 }}
+                  />
+                ))}
+              </PaginationPageGroup>
+              <PaginationNext _hover={{ bg: "gray.400" }} ml="1rem" mt={-4} h={8}>
+                <ArrowForwardIcon />
+              </PaginationNext>
+            </PaginationContainer>
+          </Pagination>
+        </Flex>
       </Stack>
     </ChakraProvider>
   );
