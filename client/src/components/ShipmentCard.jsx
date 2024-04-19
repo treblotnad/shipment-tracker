@@ -27,11 +27,9 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-
   Button,
   IconButton,
-  Skeleton
-
+  Skeleton,
 } from "@chakra-ui/react";
 
 import { ArrowRightIcon, DeleteIcon } from "@chakra-ui/icons";
@@ -42,14 +40,14 @@ const logo = {
   usps: "/images/usps.png",
 };
 
-let arrived = 'Arriving ';
-
 export default function ShipmentCard({ shipmentId, props }) {
   const [removeShipment] = useMutation(REMOVE_SHIPMENT, {
     refetchQueries: ["me"],
   });
   const [mapImage, setMapImage] = useState("");
   const [loading, setLoading] = useState(true);
+  let arrived = "Arriving ";
+
   //   console.log(props);
   const handleRemoveShipment = async () => {
     if (!Auth.loggedIn()) {
@@ -71,7 +69,7 @@ export default function ShipmentCard({ shipmentId, props }) {
   };
   function etaDefine() {
     if (props.current_status === "Delivered") {
-      arrived = 'Arrived ';
+      arrived = "Arrived ";
       return dateToWeekDate(props.trackings.shipment_delivery_date);
     } else {
       return (
@@ -112,9 +110,9 @@ export default function ShipmentCard({ shipmentId, props }) {
       <AccordionItem>
         <AccordionButton onClick={getImage}>
           <Flex
-            justifyContent={{ base: 'center', md: 'space-between' }}
-            alignItems='center'
-            flexWrap='wrap'
+            justifyContent={{ base: "center", md: "space-between" }}
+            alignItems="center"
+            flexWrap="wrap"
             spacing={10}
             w="full"
             pt={3}
@@ -134,72 +132,85 @@ export default function ShipmentCard({ shipmentId, props }) {
                   )}
 
                   {/* Tracking Number */}
-                  <Text fontWeight="bold" fontSize='lg' color='dark-grey'>{props.tracking_number}</Text>
+                  <Text fontWeight="bold" fontSize="lg" color="dark-grey">
+                    {props.tracking_number}
+                  </Text>
                 </Grid>
               </Center>
             </Box>
 
-
             {/* Ship From and Ship To */}
             <Box pb={5} px={4}>
-              <Box border='1px' borderColor='gray.300' borderRadius='md' pt='3' px='5' bg='gray.50'>
-                <Center m='auto'>
-
+              <Box
+                border="1px"
+                borderColor="gray.300"
+                borderRadius="md"
+                pt="3"
+                px="5"
+                bg="gray.50"
+              >
+                <Center m="auto">
                   {isNarrowScreen ? (
-
-                    <VStack spacing={1} alignItems='center' align='center'>
-                      <Text fontWeight="bold" fontSize='auto'>
+                    <VStack spacing={1} alignItems="center" align="center">
+                      <Text fontWeight="bold" fontSize="auto">
                         {props.trackings.address.ship_from.city},{" "}
                         {props.trackings.address.ship_from.state}{" "}
-                        <Center><ArrowRightIcon boxSize={4} mt={4} color='green' /></Center>
+                        <Center>
+                          <ArrowRightIcon boxSize={4} mt={4} color="green" />
+                        </Center>
                       </Text>
-                      <Text fontWeight="bold" fontSize='auto'>
+                      <Text fontWeight="bold" fontSize="auto">
                         {props.trackings.address.ship_to.city},{" "}
                         {props.trackings.address.ship_to.state}
                       </Text>
                     </VStack>
-
                   ) : (
-                    <HStack spacing={1} alignItems='center'>
-                      <Text fontWeight="bold" fontSize='auto'>
+                    <HStack spacing={1} alignItems="center">
+                      <Text fontWeight="bold" fontSize="auto">
                         {props.trackings.address.ship_from.city},{" "}
                         {props.trackings.address.ship_from.state}{" "}
-                        <ArrowRightIcon boxSize={5} mx={12} color='green' mt='auto' />
-
+                        <ArrowRightIcon
+                          boxSize={5}
+                          mx={12}
+                          color="green"
+                          mt="auto"
+                        />
                       </Text>
-                      <Text fontWeight="bold" fontSize='auto'>
+                      <Text fontWeight="bold" fontSize="auto">
                         {props.trackings.address.ship_to.city},{" "}
                         {props.trackings.address.ship_to.state}
                       </Text>
                     </HStack>
                   )}
-
                 </Center>
               </Box>
             </Box>
 
             {/* ETA */}
-            <Box pt='3' pb='5'>
-              <Center m='auto'>
+            <Box pt="3" pb="5">
+              <Center m="auto">
                 {isNarrowScreen ? (
-
-                  <VStack spacing={1} m='auto'>
-
-                    <Text fontWeight="bold" fontSize='lg' pr='3'>{arrived}{eta}</Text>
+                  <VStack spacing={1} m="auto">
+                    <Text fontWeight="bold" fontSize="lg" pr="3">
+                      {arrived}
+                      {eta}
+                    </Text>
 
                     {/* Status */}
-                    <Box m='auto' pr='2' >
+                    <Box m="auto" pr="2">
                       <Status status={props.current_status} />
                     </Box>
                   </VStack>
-
                 ) : (
-                  <HStack spacing={1} alignItems='center'>
-                    <Box pr='5'>
-                      <Text fontWeight="bold" fontSize='lg' pr='3'>{arrived}{eta}</Text>
+                  <HStack spacing={1} alignItems="center">
+                    <Box pr="5">
+                      <Text fontWeight="bold" fontSize="lg" pr="3">
+                        {arrived}
+                        {eta}
+                      </Text>
                     </Box>
                     {/* Status */}
-                    <Box pr='2' mt={-2}>
+                    <Box pr="2" mt={-2}>
                       <Status status={props.current_status} />
                     </Box>
                   </HStack>
@@ -229,40 +240,40 @@ export default function ShipmentCard({ shipmentId, props }) {
 
         {/* Expanded Shipment Card */}
         <AccordionPanel>
-          <Grid templateColumns={{
-            base: '1fr',
-            md: '1fr 3fr'
-          }}
-            gap={4} >
+          <Grid
+            templateColumns={{
+              base: "1fr",
+              md: "1fr 3fr",
+            }}
+            gap={4}
+          >
             <GridItem>
               <Image src={mapImage} alt="Shipment Map" />
-              <Text color='gray' fontSize='sm' mt={2}>
-                <strong>{props.trackings.shipment_type || ''}</strong> • Shipped on {dateToWeekDate(props.trackings.shipment_pickup_date)}
+              <Text color="gray" fontSize="sm" mt={2}>
+                <strong>{props.trackings.shipment_type || ""}</strong> • Shipped
+                on {dateToWeekDate(props.trackings.shipment_pickup_date)}
               </Text>
             </GridItem>
 
-            <GridItem pl='5'>
-
+            <GridItem pl="5">
               {/* Each checkpoint and message */}
-              <Grid templateColumns='repeat(3, 1fr)' gap={1}>
-
-
+              <Grid templateColumns="repeat(3, 1fr)" gap={1}>
                 {props.trackings.checkpoints.map((checkpoint, index) => {
-                  if (index === 0 || checkpoint.location == '') return null; // Skip the first checkpoint
+                  if (index === 0 || checkpoint.location == "") return null; // Skip the first checkpoint
                   return (
                     <GridItem key={index}>
                       <Box pl={3} pb={5}>
-                        <Text mb={0} fontSize='sm'>
-                          {dateToShortDate(checkpoint.checkpoint_time)}: {checkpoint.location.trim()}
+                        <Text mb={0} fontSize="sm">
+                          {dateToShortDate(checkpoint.checkpoint_time)}:{" "}
+                          {checkpoint.location.trim()}
                         </Text>
-                        <Text as='i' color='gray' fontSize='sm' >
+                        <Text as="i" color="gray" fontSize="sm">
                           {checkpoint.message}
                         </Text>
                       </Box>
                     </GridItem>
                   );
                 })}
-
               </Grid>
             </GridItem>
           </Grid>
