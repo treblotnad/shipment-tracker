@@ -30,7 +30,7 @@ function pageSlice(array, pageSize, offset) {
 function etaDefine(props) {
   //   console.log(props);
   if (props.current_status === "Delivered") {
-    return props.trackings.shipment_delivery_date;
+    return props?.trackings?.shipment_delivery_date;
   } else {
     return props.trackings.expected_delivery || "Not available";
   }
@@ -154,8 +154,8 @@ function PaginationObj({ props, dbProps }) {
               <ShipmentCard
                 shipmentId={shipment.mongoId}
                 key={shipment.mongoId}
-                tracking_number={shipment.tracking_number}
-                slug={shipment.slug}
+                tracking_number={shipment?.tracking_number}
+                slug={shipment?.slug}
                 props={shipment}
               />
             ))}
