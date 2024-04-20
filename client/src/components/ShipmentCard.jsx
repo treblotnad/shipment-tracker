@@ -74,7 +74,7 @@ export default function ShipmentCard({ shipmentId, props }) {
   const eta = etaDefine();
 
   const isNarrowScreen = useBreakpointValue({ base: true, md: false });
-  
+
   async function getImage(e) {
     e.preventDefault;
     try {
@@ -101,7 +101,7 @@ export default function ShipmentCard({ shipmentId, props }) {
 
   return (
     <>
-      <AccordionItem >
+      <AccordionItem>
         <AccordionButton onClick={getImage}>
           <Flex
             justifyContent={{ base: "center", md: "space-between" }}
@@ -225,6 +225,7 @@ export default function ShipmentCard({ shipmentId, props }) {
                     mt={-2}
                     ml={10}
                     onClick={handleRemoveShipment}
+                    zIndex={5}
                   />
                 )}
               </Center>
