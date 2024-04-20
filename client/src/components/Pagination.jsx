@@ -8,7 +8,6 @@ import {
   Accordion,
   Checkbox,
   Flex,
-  useDisclosure,
   useBreakpointValue,
 } from "@chakra-ui/react";
 import {
@@ -110,6 +109,7 @@ function PaginationObj({ props, dbProps }) {
     const pagePackages = pageSlice(packagesSorted, pageSize, offset);
     setPackages(pagePackages);
     setPackagesTotal(packagesSorted.length);
+    setAccordionIndex(-1);
   }, [
     currentPage,
     pageSize,
@@ -134,12 +134,22 @@ function PaginationObj({ props, dbProps }) {
   };
   const isNarrowScreen = useBreakpointValue({ base: true, lg: false });
   const isMobile = useBreakpointValue({ base: true, sm: false });
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [accordionIndex, setAccordionIndex] = useState(-1);
+
+  function changeIndex(e) {
+    setAccordionIndex(e);
+  }
+
   return (
     <ChakraProvider>
       <Stack spacing={5}>
         <SimpleGrid columns={{ sm: 1, md: 1, lg: 1 }}>
-          <Accordion allowToggle defaultIndex={-1}>
+          <Accordion
+            allowToggle
+            defaultIndex={-1}
+            onChange={changeIndex}
+            index={accordionIndex}
+          >
             {packages.map((shipment) => (
               <ShipmentCard
                 shipmentId={shipment.mongoId}
