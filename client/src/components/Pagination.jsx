@@ -8,6 +8,8 @@ import {
   Accordion,
   Checkbox,
   Flex,
+  useDisclosure,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import {
   Pagination,
@@ -108,7 +110,6 @@ function PaginationObj({ props, dbProps }) {
     const pagePackages = pageSlice(packagesSorted, pageSize, offset);
     setPackages(pagePackages);
     setPackagesTotal(packagesSorted.length);
-    
   }, [
     currentPage,
     pageSize,
@@ -120,7 +121,7 @@ function PaginationObj({ props, dbProps }) {
     pages,
     checkedItems,
   ]);
-  
+
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);
   };
@@ -131,7 +132,9 @@ function PaginationObj({ props, dbProps }) {
   const handleSortChange = (event) => {
     setSort(event.target.value);
   };
-  
+  const isNarrowScreen = useBreakpointValue({ base: true, lg: false });
+  const isMobile = useBreakpointValue({ base: true, sm: false });
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <ChakraProvider>
       <Stack spacing={5}>
@@ -144,7 +147,6 @@ function PaginationObj({ props, dbProps }) {
                 tracking_number={shipment.tracking_number}
                 slug={shipment.slug}
                 props={shipment}
-                
               />
             ))}
           </Accordion>
@@ -154,34 +156,163 @@ function PaginationObj({ props, dbProps }) {
         <Flex justifyContent="space-between" alignItems="center" w="full" p={2}>
           {/* Left-side - Sorting and results count */}
           <Flex alignItems="center">
-            <Select onChange={handlePageSizeChange} w={150} h={8} mr={4}>
-              <option value="5">5 per page</option>
-              <option value="10">10 per page</option>
-              <option value="20">20 per page</option>
-            </Select>
-            <Select onChange={handleSortChange} w={180} h={8}>
-              <option value="ETA-Desc">Sort by Recent</option>
-              <option value="ETA-Asc">Sort by Oldest</option>
-            </Select>
-            <Stack spacing={1} direction="row" ml={3}>
-              <Checkbox
-                isChecked={checkedItems[0]}
-                mx={4}
-                onChange={(e) =>
-                  setCheckedItems([e.target.checked, checkedItems[1]])
-                }
-              >
-                Delivered
-              </Checkbox>
-              <Checkbox
-                isChecked={checkedItems[1]}
-                onChange={(e) =>
-                  setCheckedItems([checkedItems[0], e.target.checked])
-                }
-              >
-                In Transit
-              </Checkbox>
-            </Stack>
+            {isMobile ? (
+              <Stack direction="column">
+                {isNarrowScreen ? (
+                  <Stack direction="column">
+                    <Select
+                      onChange={handlePageSizeChange}
+                      w={150}
+                      h={8}
+                      mr={4}
+                    >
+                      <option value="5">5 per page</option>
+                      <option value="10">10 per page</option>
+                      <option value="20">20 per page</option>
+                    </Select>
+                    <Select onChange={handleSortChange} w={180} h={8}>
+                      <option value="ETA-Desc">Sort by Recent</option>
+                      <option value="ETA-Asc">Sort by Oldest</option>
+                    </Select>
+                  </Stack>
+                ) : (
+                  <Stack direction="row">
+                    <Select
+                      onChange={handlePageSizeChange}
+                      w={150}
+                      h={8}
+                      mr={4}
+                    >
+                      <option value="5">5 per page</option>
+                      <option value="10">10 per page</option>
+                      <option value="20">20 per page</option>
+                    </Select>
+                    <Select onChange={handleSortChange} w={180} h={8}>
+                      <option value="ETA-Desc">Sort by Recent</option>
+                      <option value="ETA-Asc">Sort by Oldest</option>
+                    </Select>
+                  </Stack>
+                )}
+                {isNarrowScreen ? (
+                  <Stack spacing={1} direction="column" ml={3}>
+                    <Checkbox
+                      isChecked={checkedItems[0]}
+                      onChange={(e) =>
+                        setCheckedItems([e.target.checked, checkedItems[1]])
+                      }
+                    >
+                      Delivered
+                    </Checkbox>
+                    <Checkbox
+                      isChecked={checkedItems[1]}
+                      onChange={(e) =>
+                        setCheckedItems([checkedItems[0], e.target.checked])
+                      }
+                    >
+                      In Transit
+                    </Checkbox>
+                  </Stack>
+                ) : (
+                  <Stack spacing={1} direction="row" ml={3}>
+                    <Checkbox
+                      isChecked={checkedItems[0]}
+                      mx={4}
+                      onChange={(e) =>
+                        setCheckedItems([e.target.checked, checkedItems[1]])
+                      }
+                    >
+                      Delivered
+                    </Checkbox>
+                    <Checkbox
+                      isChecked={checkedItems[1]}
+                      onChange={(e) =>
+                        setCheckedItems([checkedItems[0], e.target.checked])
+                      }
+                    >
+                      In Transit
+                    </Checkbox>
+                  </Stack>
+                )}
+              </Stack>
+            ) : (
+              <Stack direction="row">
+                {isNarrowScreen ? (
+                  <Stack direction="column">
+                    <Select
+                      onChange={handlePageSizeChange}
+                      w={150}
+                      h={8}
+                      mr={4}
+                    >
+                      <option value="5">5 per page</option>
+                      <option value="10">10 per page</option>
+                      <option value="20">20 per page</option>
+                    </Select>
+                    <Select onChange={handleSortChange} w={180} h={8}>
+                      <option value="ETA-Desc">Sort by Recent</option>
+                      <option value="ETA-Asc">Sort by Oldest</option>
+                    </Select>
+                  </Stack>
+                ) : (
+                  <Stack direction="row">
+                    <Select
+                      onChange={handlePageSizeChange}
+                      w={150}
+                      h={8}
+                      mr={4}
+                    >
+                      <option value="5">5 per page</option>
+                      <option value="10">10 per page</option>
+                      <option value="20">20 per page</option>
+                    </Select>
+                    <Select onChange={handleSortChange} w={180} h={8}>
+                      <option value="ETA-Desc">Sort by Recent</option>
+                      <option value="ETA-Asc">Sort by Oldest</option>
+                    </Select>
+                  </Stack>
+                )}
+                {isNarrowScreen ? (
+                  <Stack spacing={1} direction="column" ml={3}>
+                    <Checkbox
+                      isChecked={checkedItems[0]}
+                      onChange={(e) =>
+                        setCheckedItems([e.target.checked, checkedItems[1]])
+                      }
+                    >
+                      Delivered
+                    </Checkbox>
+                    <Checkbox
+                      isChecked={checkedItems[1]}
+                      onChange={(e) =>
+                        setCheckedItems([checkedItems[0], e.target.checked])
+                      }
+                    >
+                      In Transit
+                    </Checkbox>
+                  </Stack>
+                ) : (
+                  <Stack spacing={1} direction="row" ml={3}>
+                    <Checkbox
+                      isChecked={checkedItems[0]}
+                      mx={4}
+                      onChange={(e) =>
+                        setCheckedItems([e.target.checked, checkedItems[1]])
+                      }
+                    >
+                      Delivered
+                    </Checkbox>
+                    <Checkbox
+                      isChecked={checkedItems[1]}
+                      onChange={(e) =>
+                        setCheckedItems([checkedItems[0], e.target.checked])
+                      }
+                    >
+                      In Transit
+                    </Checkbox>
+                  </Stack>
+                )}
+              </Stack>
+            )}
           </Flex>
 
           {/* Right-side - Pagination controls */}
