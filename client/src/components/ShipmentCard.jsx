@@ -40,7 +40,6 @@ export default function ShipmentCard({ shipmentId, props }) {
   });
   const [mapImage, setMapImage] = useState("");
   const [loading, setLoading] = useState(true);
-  let arrived = "Arriving ";
 
   //   console.log(props);
   const handleRemoveShipment = async () => {
@@ -63,12 +62,16 @@ export default function ShipmentCard({ shipmentId, props }) {
   };
   function etaDefine() {
     if (props.current_status === "Delivered") {
-      arrived = "Arrived ";
-      return dateToWeekDate(props.trackings.shipment_delivery_date);
-    } else {
-      return (
-        dateToWeekDate(props.trackings.expected_delivery) || "ETA not available"
+      return "Delivered ".concat(
+        dateToWeekDate(props.trackings.shipment_delivery_date)
       );
+    }
+    if (props.tracking?.expected_delivery) {
+      return "Arriving ".concat(
+        dateToWeekDate(props.trackings.expected_delivery)
+      );
+    } else {
+      return "ETA not Available";
     }
   }
   const eta = etaDefine();
@@ -98,6 +101,24 @@ export default function ShipmentCard({ shipmentId, props }) {
       console.error("Failed to fetch tracking details");
     }
   }
+  let pickupDate = "";
+  if (props.trackings.shipment_pickup_date) {
+    pickupDate = dateToWeekDate(props.trackings.shipment_pickup_date);
+  }
+  let shipFrom = "";
+  let shipTo = "";
+  if (props.trackings.address.ship_from?.city) {
+    shipFrom = props.trackings.address.ship_from?.city.concat(
+      ", ",
+      props.trackings.address.ship_from?.state
+    );
+  }
+  if (props.trackings.address.ship_to?.city) {
+    shipTo = props.trackings.address.ship_to?.city.concat(
+      ", ",
+      props.trackings.address.ship_to?.state
+    );
+  }
 
   return (
     <>
@@ -115,19 +136,19 @@ export default function ShipmentCard({ shipmentId, props }) {
             <Box pt={2} pb={5}>
               <Center m="auto">
                 <Grid templateColumns="1fr 4fr" gap={4}>
-                  {props.slug === "ups" && (
+                  {props?.slug === "ups" && (
                     <Image src={logo.ups} alt="UPS" height="40px" />
                   )}
-                  {props.slug === "fedex" && (
+                  {props?.slug === "fedex" && (
                     <Image src={logo.fedex} alt="FedEx" height="40px" />
                   )}
-                  {props.slug === "usps" && (
+                  {props?.slug === "usps" && (
                     <Image src={logo.usps} alt="USPS" height="40px" />
                   )}
 
                   {/* Tracking Number */}
                   <Text fontWeight="bold" fontSize="lg" color="dark-grey">
-                    {props.tracking_number}
+                    {props?.tracking_number}
                   </Text>
                 </Grid>
               </Center>
@@ -143,40 +164,41 @@ export default function ShipmentCard({ shipmentId, props }) {
                 px="5"
                 bg="gray.50"
               >
-                <Center m="auto">
-                  {isNarrowScreen ? (
-                    <VStack spacing={1} alignItems="center" align="center">
-                      <Text fontWeight="bold" fontSize="auto">
-                        {props.trackings.address.ship_from.city},{" "}
-                        {props.trackings.address.ship_from.state}{" "}
-                        <Center>
-                          <ArrowRightIcon boxSize={4} mt={4} color="green" />
-                        </Center>
-                      </Text>
-                      <Text fontWeight="bold" fontSize="auto">
-                        {props.trackings.address.ship_to.city},{" "}
-                        {props.trackings.address.ship_to.state}
-                      </Text>
-                    </VStack>
-                  ) : (
-                    <HStack spacing={1} alignItems="center">
-                      <Text fontWeight="bold" fontSize="auto">
-                        {props.trackings.address.ship_from.city},{" "}
-                        {props.trackings.address.ship_from.state}{" "}
-                        <ArrowRightIcon
-                          boxSize={5}
-                          mx={12}
-                          color="green"
-                          mt="auto"
-                        />
-                      </Text>
-                      <Text fontWeight="bold" fontSize="auto">
-                        {props.trackings.address.ship_to.city},{" "}
-                        {props.trackings.address.ship_to.state}
-                      </Text>
-                    </HStack>
-                  )}
-                </Center>
+                {props.trackings.address.ship_from?.city &&
+                props.trackings.address.ship_to?.city ? (
+                  <Center m="auto">
+                    {isNarrowScreen ? (
+                      <VStack spacing={1} alignItems="center" align="center">
+                        <Text fontWeight="bold" fontSize="auto">
+                          {shipFrom}
+                          <Center>
+                            <ArrowRightIcon boxSize={4} mt={4} color="green" />
+                          </Center>
+                        </Text>
+                        <Text fontWeight="bold" fontSize="auto">
+                          {shipTo}
+                        </Text>
+                      </VStack>
+                    ) : (
+                      <HStack spacing={1} alignItems="center">
+                        <Text fontWeight="bold" fontSize="auto">
+                          {shipFrom}
+                          <ArrowRightIcon
+                            boxSize={5}
+                            mx={12}
+                            color="green"
+                            mt="auto"
+                          />
+                        </Text>
+                        <Text fontWeight="bold" fontSize="auto">
+                          {shipTo}
+                        </Text>
+                      </HStack>
+                    )}
+                  </Center>
+                ) : (
+                  <Text>No Data Available Yet!</Text>
+                )}
               </Box>
             </Box>
 
@@ -186,7 +208,6 @@ export default function ShipmentCard({ shipmentId, props }) {
                 {isNarrowScreen ? (
                   <VStack spacing={1} m="auto">
                     <Text fontWeight="bold" fontSize="lg" pr="3">
-                      {arrived}
                       {eta}
                     </Text>
 
@@ -199,13 +220,12 @@ export default function ShipmentCard({ shipmentId, props }) {
                   <HStack spacing={1} alignItems="center">
                     <Box pr="5">
                       <Text fontWeight="bold" fontSize="lg" pr="3">
-                        {arrived}
                         {eta}
                       </Text>
                     </Box>
                     {/* Status */}
                     <Box pr="2" mt={-2}>
-                      <Status status={props.current_status} />
+                      <Status status={props?.current_status} />
                     </Box>
                   </HStack>
                 )}
@@ -242,17 +262,23 @@ export default function ShipmentCard({ shipmentId, props }) {
             }}
             gap={4}
           >
-            <GridItem>
-              {loading ? (
-                <Skeleton height="220px"></Skeleton>
-              ) : (
-                <Image src={mapImage} alt="Shipment Map" />
-              )}
-              <Text color="gray" fontSize="sm" mt={2}>
-                <strong>{props.trackings.shipment_type || ""}</strong> • Shipped
-                on {dateToWeekDate(props.trackings.shipment_pickup_date)}
-              </Text>
-            </GridItem>
+            {props.trackings.shipment_pickup_date ? (
+              <GridItem>
+                {loading ? (
+                  <Skeleton height="220px"></Skeleton>
+                ) : (
+                  <Image src={mapImage} alt="Shipment Map" />
+                )}
+                <Text color="gray" fontSize="sm" mt={2}>
+                  <strong>{props.trackings.shipment_type || ""}</strong> •
+                  Shipped on {pickupDate}
+                </Text>
+              </GridItem>
+            ) : (
+              <GridItem>
+                <Text>No Shipping Data Available!</Text>
+              </GridItem>
+            )}
 
             <GridItem pl="5">
               {/* Each checkpoint and message */}
