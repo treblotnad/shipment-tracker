@@ -98,6 +98,10 @@ export default function ShipmentCard({ shipmentId, props }) {
       console.error("Failed to fetch tracking details");
     }
   }
+  let pickupDate = "";
+  if (props.trackings.shipment_pickup_date) {
+    pickupDate = dateToWeekDate(props.trackings.shipment_pickup_date);
+  }
 
   return (
     <>
@@ -115,19 +119,19 @@ export default function ShipmentCard({ shipmentId, props }) {
             <Box pt={2} pb={5}>
               <Center m="auto">
                 <Grid templateColumns="1fr 4fr" gap={4}>
-                  {props.slug === "ups" && (
+                  {props?.slug === "ups" && (
                     <Image src={logo.ups} alt="UPS" height="40px" />
                   )}
-                  {props.slug === "fedex" && (
+                  {props?.slug === "fedex" && (
                     <Image src={logo.fedex} alt="FedEx" height="40px" />
                   )}
-                  {props.slug === "usps" && (
+                  {props?.slug === "usps" && (
                     <Image src={logo.usps} alt="USPS" height="40px" />
                   )}
 
                   {/* Tracking Number */}
                   <Text fontWeight="bold" fontSize="lg" color="dark-grey">
-                    {props.tracking_number}
+                    {props?.tracking_number}
                   </Text>
                 </Grid>
               </Center>
@@ -147,22 +151,22 @@ export default function ShipmentCard({ shipmentId, props }) {
                   {isNarrowScreen ? (
                     <VStack spacing={1} alignItems="center" align="center">
                       <Text fontWeight="bold" fontSize="auto">
-                        {props.trackings.address.ship_from.city},{" "}
-                        {props.trackings.address.ship_from.state}{" "}
+                        {props.trackings.address.ship_from?.city},{" "}
+                        {props.trackings.address.ship_from?.state}
                         <Center>
                           <ArrowRightIcon boxSize={4} mt={4} color="green" />
                         </Center>
                       </Text>
                       <Text fontWeight="bold" fontSize="auto">
-                        {props.trackings.address.ship_to.city},{" "}
-                        {props.trackings.address.ship_to.state}
+                        {props.trackings.address.ship_to?.city},{" "}
+                        {props.trackings.address.ship_to?.state}
                       </Text>
                     </VStack>
                   ) : (
                     <HStack spacing={1} alignItems="center">
                       <Text fontWeight="bold" fontSize="auto">
-                        {props.trackings.address.ship_from.city},{" "}
-                        {props.trackings.address.ship_from.state}{" "}
+                        {props.trackings.address.ship_from?.city},{" "}
+                        {props.trackings.address.ship_from?.state}
                         <ArrowRightIcon
                           boxSize={5}
                           mx={12}
@@ -171,8 +175,8 @@ export default function ShipmentCard({ shipmentId, props }) {
                         />
                       </Text>
                       <Text fontWeight="bold" fontSize="auto">
-                        {props.trackings.address.ship_to.city},{" "}
-                        {props.trackings.address.ship_to.state}
+                        {props.trackings.address.ship_to?.city},{" "}
+                        {props.trackings.address.ship_to?.state}
                       </Text>
                     </HStack>
                   )}
@@ -205,7 +209,7 @@ export default function ShipmentCard({ shipmentId, props }) {
                     </Box>
                     {/* Status */}
                     <Box pr="2" mt={-2}>
-                      <Status status={props.current_status} />
+                      <Status status={props?.current_status} />
                     </Box>
                   </HStack>
                 )}
@@ -242,17 +246,23 @@ export default function ShipmentCard({ shipmentId, props }) {
             }}
             gap={4}
           >
-            <GridItem>
-              {loading ? (
-                <Skeleton height="220px"></Skeleton>
-              ) : (
-                <Image src={mapImage} alt="Shipment Map" />
-              )}
-              <Text color="gray" fontSize="sm" mt={2}>
-                <strong>{props.trackings.shipment_type || ""}</strong> • Shipped
-                on {dateToWeekDate(props.trackings.shipment_pickup_date)}
-              </Text>
-            </GridItem>
+            {props.trackings.shipment_pickup_date ? (
+              <GridItem>
+                {loading ? (
+                  <Skeleton height="220px"></Skeleton>
+                ) : (
+                  <Image src={mapImage} alt="Shipment Map" />
+                )}
+                <Text color="gray" fontSize="sm" mt={2}>
+                  <strong>{props.trackings.shipment_type || ""}</strong> •
+                  Shipped on {pickupDate}
+                </Text>
+              </GridItem>
+            ) : (
+              <GridItem>
+                <Text>No Shipping Data Available!</Text>
+              </GridItem>
+            )}
 
             <GridItem pl="5">
               {/* Each checkpoint and message */}
