@@ -140,7 +140,7 @@ const resolvers = {
           { $pull: { savedShipments: { _id: shipmentId } } },
           { new: true }
         );
-        console.log(User);
+        // console.log(User);
         return User;
       }
       throw new AuthenticationError("You need to be logged in!");
