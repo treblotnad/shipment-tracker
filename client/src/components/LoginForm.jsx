@@ -94,7 +94,7 @@ const LoginForm = () => {
                                 </Alert>
                             )}
 
-                            <Button type="submit" colorScheme="blue" isDisabled={!userFormData.email || !userFormData.password}>
+                            <Button type="submit" colorScheme="blue" mb='5' isDisabled={!userFormData.email || !userFormData.password}>
                                 Login
                             </Button>
                         </Stack>
