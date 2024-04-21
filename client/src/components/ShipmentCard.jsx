@@ -57,7 +57,7 @@ export default function ShipmentCard({ shipmentId, props }) {
           shipmentId: shipmentId,
         },
       });
-      console.log("Removed shipment", shipmentId);
+      // console.log("Removed shipment", shipmentId);
     } catch (error) {
       console.error(error);
     }
@@ -97,7 +97,7 @@ export default function ShipmentCard({ shipmentId, props }) {
       setMapImage(response?.data?.image);
 
       if (!shipmentData || shipmentData.trackings.tag === "Pending") {
-        console.log("No shipment found or the shipment is currently pending.");
+        // console.log("No shipment found or the shipment is currently pending.");
       } else {
         // console.log("mapImage");
         setLoading(false);

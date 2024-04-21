@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../utils/queries";
-import { REMOVE_SHIPMENT } from "../utils/mutations";
+
 import { SAVE_SHIPMENT } from "../utils/mutations";
 import Auth from "../utils/auth";
-import { removeShipmentId } from "../utils/localStorage";
+
 // import { matchCarrier } from "../utils/carrierValidate";
 import SearchTracking from "../components/SearchTracking";
 import PaginationObj from "../components/Pagination";
 
-import { Box, Text, SimpleGrid, Skeleton } from "@chakra-ui/react";
+import { Box, Text, Skeleton } from "@chakra-ui/react";
 
 const Dashboard = () => {
   const { loading, data, error } = useQuery(GET_ME);
@@ -53,7 +53,7 @@ const Dashboard = () => {
   const dbShipments = data?.me?.savedShipments;
   const savedShipments = data?.me?.hiveData || [];
 
-  console.log(data.me);
+  // console.log(data.me);
 
   return (
     <Box padding="4">

@@ -38,7 +38,7 @@ const LoginForm = () => {
             });
 
             if (data.login.token) {
-                console.log(data.login.token)
+                // console.log(data.login.token)
                 Auth.login(data.login.token);
             }
 

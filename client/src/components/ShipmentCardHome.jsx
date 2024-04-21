@@ -47,9 +47,9 @@ export default function ShipmentCardHome({ shipmentDetails, mapImage }) {
 
   const isNarrowScreen = useBreakpointValue({ base: true, md: false });
 
-  {
-    console.log(shipmentDetails);
-  }
+  // {
+  //   console.log(shipmentDetails);
+  // }
 
   if (isNarrowScreen) {
     return (
