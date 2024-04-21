@@ -129,10 +129,9 @@ export default function ShipmentCard({ shipmentId, props }) {
   if (isNarrowScreen) {
     return (
       <>
-        <AccordionItem>
+        <AccordionItem maxW='100%'>
           <AccordionButton onClick={getImage}>
             <Flex
-              justify='space-between'
               wrap='wrap'
               spacing={4}
               pt={5}
@@ -140,7 +139,7 @@ export default function ShipmentCard({ shipmentId, props }) {
 
               {/* Logo based on the carrier, with image sources in the const above */}
               <Container>
-                <Flex mx={-2}>
+                <Flex mx={-2} justify='space-between'>
 
                   {props?.slug === "ups" && (
                     <Image src={logo.ups} alt="UPS" height="40px" />
