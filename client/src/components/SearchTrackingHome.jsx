@@ -59,7 +59,7 @@ export default function SearchTrackingHome({
   };
 
   return (
-    <FormControl onSubmit={handleSearch}>
+    <FormControl onSubmit={handleSearch} px='4'>
       <InputGroup>
         <Input
           h="2.5rem"
