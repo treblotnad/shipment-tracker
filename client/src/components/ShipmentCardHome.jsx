@@ -60,9 +60,7 @@ export default function ShipmentCardHome({ shipmentDetails, mapImage }) {
             spacing={4}
           >
 
-            {/* Logo based on the carrier */}
             <Container>
-
               <Flex mx={-2}>
                 {/* Logo */}
                 {shipmentDetails.slug === "ups" && (
@@ -80,9 +78,7 @@ export default function ShipmentCardHome({ shipmentDetails, mapImage }) {
                 <Box ml='auto'>
                   <Status status={shipmentDetails.trackings.tag} fontSize={'xs'} />
                 </Box>
-
               </Flex>
-
             </Container>
 
             {/* Ship From and Ship To */}
@@ -125,8 +121,6 @@ export default function ShipmentCardHome({ shipmentDetails, mapImage }) {
 
               {/* Each checkpoint and message */}
               <Grid templateColumns='1fr' gap={0}>
-
-
                 {shipmentDetails.trackings.checkpoints.map((checkpoint, index) => {
                   if (index === 0 || checkpoint.location == '') return null; // Skip the first checkpoint
                   return (

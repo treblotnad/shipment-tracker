@@ -96,18 +96,13 @@ export default function Hero() {
           position={"relative"}
           w={"full"}
         >
-          <Box
-            position={"relative"}
-            height={"300px"}
-            width={"full"}
-            overflow={"hidden"}
-          >
+          <Box width="100%" overflow="hidden">
             <Image
-              alt={"Hero Image"}
-              fit={"cover"}
-              align={"center"}
-              h={"100%"}
-              src={"../images/heroscreen.png"}
+              src="../images/heroscreen.png"
+              alt="Hero Image"
+              w="100%"
+              h="auto"
+              objectFit="contain"
             />
           </Box>
         </Flex>

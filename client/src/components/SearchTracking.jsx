@@ -59,7 +59,7 @@ export default function SearchTracking({ onSaveShipment }) {
         </InputRightElement>
       </InputGroup>
       {isError ? (
-        <FormErrorMessage>{errorMessage}</FormErrorMessage>
+        <FormErrorMessage mt={-5} mb={8}>{errorMessage}</FormErrorMessage>
       ) : (
         <FormHelperText></FormHelperText>
       )}

@@ -104,6 +104,7 @@ const SignupForm = () => {
                             type="submit"
                             colorScheme="blue"
                             mt={4}
+                            mb={4}
                             isDisabled={!userFormData.firstname || !userFormData.lastname || !userFormData.email || !userFormData.password}
                         >
                             Submit
