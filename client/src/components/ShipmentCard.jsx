@@ -63,16 +63,16 @@ export default function ShipmentCard({ shipmentId, props }) {
     }
   };
 
-  let arrived = 'Arriving ';
+  
 
   function etaDefine() {
     if (props.current_status === "Delivered") {
-      arrived = 'Arrived ';
+      
       return "Delivered ".concat(
         dateToWeekDate(props.trackings.shipment_delivery_date)
       );
     }
-    if (props.tracking?.expected_delivery) {
+    if (props.trackings?.expected_delivery) {
       return "Arriving ".concat(
         dateToWeekDate(props.trackings.expected_delivery)
       );
@@ -193,7 +193,7 @@ export default function ShipmentCard({ shipmentId, props }) {
 
               {/* ETA */}
               <Container pt='2' mt={-4} textAlign='left'>
-                <Text fontWeight="bold" fontSize='sm'>{arrived}{eta}</Text>
+                <Text fontWeight="bold" fontSize='sm'>{eta}</Text>
               </Container>
 
             </Flex>
