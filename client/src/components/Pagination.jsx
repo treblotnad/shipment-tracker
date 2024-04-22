@@ -97,6 +97,12 @@ function PaginationObj({ props, dbProps }) {
     }
     const packagesEta = etaObjCreator();
     const packagesSorted = packagesEta.sort(function (a, b) {
+      if (a.eta === "Not available") {
+        return 1;
+      }
+      if (b.eta === "Not available") {
+        return -1;
+      }
       if (sort === "ETA-Desc") {
         return new Date(b.eta) - new Date(a.eta);
       } else {
